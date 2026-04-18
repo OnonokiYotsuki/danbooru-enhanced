@@ -4,6 +4,20 @@
   "version": "1.0.0",
   "description": "__MSG_extDescription__",
   "default_locale": "zh_CN",
+  "icons": {
+    "16": "_locales/icon.png",
+    "32": "_locales/icon.png",
+    "48": "_locales/icon.png",
+    "128": "_locales/icon.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "_locales/icon.png",
+      "32": "_locales/icon.png",
+      "48": "_locales/icon.png",
+      "128": "_locales/icon.png"
+    }
+  },
   "permissions": ["activeTab"],
   "content_scripts": [
     {
