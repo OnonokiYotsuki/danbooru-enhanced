@@ -104,6 +104,59 @@
 
     let masonryEnabled = localStorage.getItem(CONFIG.masonry.storageKey) === 'true';
     let masonryObserver = null;
+    let masonryResizeTimer = null;
+
+    /**
+     * 瀑布流布局引擎：按行顺序排列（每个 item 放入当前最短的列）
+     * 当列高度相同时，按从左到右的顺序填充，从而实现行优先排序。
+     */
+    function layoutMasonry() {
+        const container = document.querySelector(CONFIG.selectors.postsContainer);
+        if (!container || !container.classList.contains('masonry-container')) return;
+
+        const items = container.querySelectorAll('.masonry-item');
+        if (items.length === 0) return;
+
+        const containerWidth = container.clientWidth;
+        const colWidth = CONFIG.masonry.columnWidth;
+        const gap = CONFIG.masonry.gap;
+
+        // 计算列数（至少 1 列）
+        const numCols = Math.max(1, Math.floor((containerWidth + gap) / (colWidth + gap)));
+        // 重新计算实际列宽，使列均匀分布填满容器
+        const actualColWidth = (containerWidth - (numCols - 1) * gap) / numCols;
+
+        // 每列的当前高度
+        const colHeights = new Array(numCols).fill(0);
+
+        items.forEach(item => {
+            // 找到最短的列（高度相同时取最左边的，即索引最小的）
+            let minHeight = colHeights[0];
+            let minCol = 0;
+            for (let c = 1; c < numCols; c++) {
+                if (colHeights[c] < minHeight) {
+                    minHeight = colHeights[c];
+                    minCol = c;
+                }
+            }
+
+            // 计算位置
+            const left = minCol * (actualColWidth + gap);
+            const top = colHeights[minCol];
+
+            // 设置 item 的位置和宽度
+            item.style.width = actualColWidth + 'px';
+            item.style.left = left + 'px';
+            item.style.top = top + 'px';
+
+            // 更新该列高度（item 实际高度 + 间距）
+            const itemHeight = item.offsetHeight;
+            colHeights[minCol] = top + itemHeight + gap;
+        });
+
+        // 设置容器高度为最高列的高度
+        container.style.height = Math.max(...colHeights) + 'px';
+    }
 
     function isMasonryEnabled() {
         return masonryEnabled;
@@ -130,7 +183,35 @@
         }
     }
 
-    function applyMasonryLayout() {
+    /**
+     * 通过 Danbooru API 批量获取帖子的 sample 图片 URL
+     * @param {string[]} postIds 帖子 ID 数组
+     * @returns {Promise<Object>} { postId: largeFileUrl }
+     */
+    async function fetchSampleUrls(postIds) {
+        const map = {};
+        const batchSize = 20;
+        for (let i = 0; i < postIds.length; i += batchSize) {
+            const batch = postIds.slice(i, i + batchSize);
+            const tagQuery = 'id:' + batch.join(',');
+            try {
+                const resp = await fetch(
+                    `/posts.json?tags=${encodeURIComponent(tagQuery)}&limit=${batch.length}`
+                );
+                if (resp.ok) {
+                    const posts = await resp.json();
+                    posts.forEach(p => {
+                        map[p.id] = p.large_file_url || p.file_url || null;
+                    });
+                }
+            } catch (e) {
+                // 静默失败，保留缩略图
+            }
+        }
+        return map;
+    }
+
+    async function applyMasonryLayout() {
         const gallery = document.querySelector(CONFIG.selectors.postGallery);
         const container = document.querySelector(CONFIG.selectors.postsContainer);
         if (!gallery || !container) return;
@@ -148,6 +229,15 @@
         });
 
         const articles = container.querySelectorAll(CONFIG.selectors.postPreview);
+
+        // 收集所有帖子 ID，批量请求 sample URL
+        const postIds = [];
+        articles.forEach(article => {
+            const id = article.dataset.id;
+            if (id) postIds.push(id);
+        });
+        const sampleUrlMap = await fetchSampleUrls(postIds);
+
         articles.forEach(article => {
             article.classList.add('masonry-item');
 
@@ -178,15 +268,27 @@
             img.style.maxHeight = '';
             img.style.minHeight = '';
 
-            // 使用 2x srcset 图片以获得更好的质量
-            const source = article.querySelector('source[srcset]');
-            if (source) {
-                const srcset = source.getAttribute('srcset');
-                const match = srcset.match(/,\s*(\S+)\s+2x/);
-                if (match) {
-                    img.dataset.masonryOrigSrc = img.src;
-                    img.src = match[1];
-                }
+            // 替换为 sample 尺寸图片（通过 API 获取的 large_file_url）
+            // 先保留缩略图显示，预加载 sample 图完成后再无缝替换
+            img.dataset.masonryOrigSrc = img.src;
+            const postId = article.dataset.id;
+            const sampleUrl = postId && sampleUrlMap[postId];
+            if (sampleUrl) {
+                const preloader = new Image();
+                preloader.onload = function() {
+                    // sample 加载完成，移除 <source> 并替换 src，实现无缝切换
+                    const picture = img.closest('picture');
+                    if (picture) {
+                        picture.querySelectorAll('source').forEach(s => s.remove());
+                    }
+                    img.src = sampleUrl;
+                    // 图片替换后尺寸变化，需要在加载完成后重新布局
+                    img.addEventListener('load', () => layoutMasonry(), { once: true });
+                };
+                preloader.onerror = function() {
+                    // 加载失败，保留缩略图
+                };
+                preloader.src = sampleUrl;
             }
 
             // 同样清除 post-preview-container 上的内联样式
@@ -197,19 +299,48 @@
                 previewContainer.style.maxHeight = '';
             }
         });
+
+        // 初始布局（使用缩略图尺寸先排一次）
+        layoutMasonry();
+
+        // 监听所有缩略图加载完成后重新布局（处理图片尺寸未知的情况）
+        articles.forEach(article => {
+            const img = article.querySelector(CONFIG.selectors.postPreviewImage);
+            if (img && !img.complete) {
+                img.addEventListener('load', () => layoutMasonry(), { once: true });
+            }
+        });
+
+        // 监听窗口 resize，防抖重新布局
+        window.removeEventListener('resize', onMasonryResize);
+        window.addEventListener('resize', onMasonryResize);
+    }
+
+    function onMasonryResize() {
+        clearTimeout(masonryResizeTimer);
+        masonryResizeTimer = setTimeout(() => layoutMasonry(), 150);
     }
 
     function removeMasonryLayout() {
+        // 移除 resize 监听
+        window.removeEventListener('resize', onMasonryResize);
+        clearTimeout(masonryResizeTimer);
+
         const gallery = document.querySelector(CONFIG.selectors.postGallery);
         const container = document.querySelector(CONFIG.selectors.postsContainer);
         if (!gallery || !container) return;
 
         gallery.classList.remove('masonry-mode');
         container.classList.remove('masonry-container');
+        container.style.height = '';
 
         const articles = container.querySelectorAll(CONFIG.selectors.postPreview);
         articles.forEach(article => {
             article.classList.remove('masonry-item');
+            article.style.position = '';
+            article.style.left = '';
+            article.style.top = '';
+            article.style.width = '';
         });
 
         // 恢复页面需要刷新以还原原始图片尺寸

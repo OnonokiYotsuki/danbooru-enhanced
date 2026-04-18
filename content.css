@@ -134,29 +134,25 @@
     display: block !important;
 }
 
-/* 瀑布流容器：CSS columns 自动分列 */
+/* 瀑布流容器：JS 绝对定位布局 */
 .post-gallery.masonry-mode .posts-container.masonry-container {
     display: block !important;
-    column-width: 200px;
-    column-gap: 6px;
+    position: relative;
     width: 100%;
 }
 
-/* 每个帖子卡片：紧凑无边框 */
+/* 每个帖子卡片：绝对定位由 JS 控制位置 */
 .post-gallery.masonry-mode .masonry-item {
-    display: inline-block;
-    width: 100%;
-    margin: 0 0 6px 0;
+    position: absolute;
+    margin: 0;
     padding: 0;
-    break-inside: avoid;
     border-radius: 6px;
     overflow: hidden;
     background: none;
     border: none;
     box-sizing: border-box;
-    position: relative;
-    line-height: 0; /* 消除 inline-block 底部间隙 */
-    transition: opacity 0.15s ease;
+    line-height: 0;
+    transition: opacity 0.15s ease, transform 0.3s ease, left 0.3s ease, top 0.3s ease;
 }
 
 .post-gallery.masonry-mode .masonry-item:hover {
@@ -166,14 +162,13 @@
 /* 覆盖 article 上所有可能的固定尺寸 */
 .post-gallery.masonry-mode .masonry-item,
 .post-gallery.masonry-mode .masonry-item[class*="post-preview"] {
-    width: 100% !important;
     height: auto !important;
     max-width: none !important;
     max-height: none !important;
     min-width: 0 !important;
     min-height: 0 !important;
     padding: 0 !important;
-    margin: 0 0 6px 0 !important;
+    margin: 0 !important;
     border: none !important;
     background: none !important;
     aspect-ratio: unset !important;
