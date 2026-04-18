@@ -1,0 +1,47 @@
+{
+  "extName": {
+    "message": "Danbooru Enhanced"
+  },
+  "extDescription": {
+    "message": "Улучшает Danbooru быстрыми фильтрами и плиточной раскладкой в стиле Pinterest."
+  },
+  "rating_label": {
+    "message": "🛡️ Рейтинг (Rating)"
+  },
+  "sort_label": {
+    "message": "📊 Сортировка (Sort)"
+  },
+  "time_label": {
+    "message": "🕒 Время (Time)"
+  },
+  "layout_label": {
+    "message": "🖼️ Макет (Layout)"
+  },
+  "reset_btn": {
+    "message": "🔄 Сбросить все фильтры"
+  },
+  "masonry_btn": {
+    "message": "Плиточный"
+  },
+  "sort_score": {
+    "message": "Счёт"
+  },
+  "sort_fav": {
+    "message": "Избранное"
+  },
+  "sort_rank": {
+    "message": "Ранг"
+  },
+  "sort_latest": {
+    "message": "Новое"
+  },
+  "time_today": {
+    "message": "Сегодня"
+  },
+  "time_week": {
+    "message": "Неделя"
+  },
+  "time_month": {
+    "message": "Месяц"
+  }
+}

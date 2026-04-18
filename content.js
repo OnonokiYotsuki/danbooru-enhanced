@@ -374,10 +374,26 @@
         const currentInput = document.querySelector(CONFIG.selectors.tagInput);
         const state = getActiveState(currentInput ? currentInput.value : '');
 
+        const i18n = {
+            rating: chrome.i18n.getMessage('rating_label'),
+            sort: chrome.i18n.getMessage('sort_label'),
+            time: chrome.i18n.getMessage('time_label'),
+            layout: chrome.i18n.getMessage('layout_label'),
+            reset: chrome.i18n.getMessage('reset_btn'),
+            masonry: chrome.i18n.getMessage('masonry_btn'),
+            score: chrome.i18n.getMessage('sort_score'),
+            fav: chrome.i18n.getMessage('sort_fav'),
+            rank: chrome.i18n.getMessage('sort_rank'),
+            latest: chrome.i18n.getMessage('sort_latest'),
+            today: chrome.i18n.getMessage('time_today'),
+            week: chrome.i18n.getMessage('time_week'),
+            month: chrome.i18n.getMessage('time_month')
+        };
+
         container.innerHTML = `
             <!-- 分级过滤 -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">🛡️ 分级 (Rating)</div>
+                <div class="quick-filter-label">${i18n.rating}</div>
                 <div class="quick-filter-group">
                     <button class="quick-filter-btn btn-rating-g ${state.rating === 'g' ? 'active' : ''}" data-type="rating" data-val="g">G</button>
                     <button class="quick-filter-btn btn-rating-s ${state.rating === 's' ? 'active' : ''}" data-type="rating" data-val="s">S</button>
@@ -388,34 +404,34 @@
 
             <!-- 排序方式 -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">📊 排序 (Sort)</div>
+                <div class="quick-filter-label">${i18n.sort}</div>
                 <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-sort-score ${state.order === 'score' ? 'active' : ''}" data-type="order" data-val="score">评分</button>
-                    <button class="quick-filter-btn btn-sort-fav ${state.order === 'favcount' ? 'active' : ''}" data-type="order" data-val="favcount">收藏</button>
-                    <button class="quick-filter-btn btn-sort-rank ${state.order === 'rank' ? 'active' : ''}" data-type="order" data-val="rank">排行</button>
-                    <button class="quick-filter-btn btn-sort-latest ${!state.order ? 'active' : ''}" data-type="order" data-val="">最新</button>
+                    <button class="quick-filter-btn btn-sort-score ${state.order === 'score' ? 'active' : ''}" data-type="order" data-val="score">${i18n.score}</button>
+                    <button class="quick-filter-btn btn-sort-fav ${state.order === 'favcount' ? 'active' : ''}" data-type="order" data-val="favcount">${i18n.fav}</button>
+                    <button class="quick-filter-btn btn-sort-rank ${state.order === 'rank' ? 'active' : ''}" data-type="order" data-val="rank">${i18n.rank}</button>
+                    <button class="quick-filter-btn btn-sort-latest ${!state.order ? 'active' : ''}" data-type="order" data-val="">${i18n.latest}</button>
                 </div>
             </div>
 
             <!-- 时间范围 -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">🕒 时间 (Time)</div>
+                <div class="quick-filter-label">${i18n.time}</div>
                 <div class="quick-filter-group">
-                    <button class="quick-filter-btn ${state.age === '<1d' ? 'active' : ''}" data-type="age" data-val="<1d">今日</button>
-                    <button class="quick-filter-btn ${state.age === '<1w' ? 'active' : ''}" data-type="age" data-val="<1w">本周</button>
-                    <button class="quick-filter-btn ${state.age === '<1mo' ? 'active' : ''}" data-type="age" data-val="<1mo">本月</button>
+                    <button class="quick-filter-btn ${state.age === '<1d' ? 'active' : ''}" data-type="age" data-val="<1d">${i18n.today}</button>
+                    <button class="quick-filter-btn ${state.age === '<1w' ? 'active' : ''}" data-type="age" data-val="<1w">${i18n.week}</button>
+                    <button class="quick-filter-btn ${state.age === '<1mo' ? 'active' : ''}" data-type="age" data-val="<1mo">${i18n.month}</button>
                 </div>
             </div>
 
             <!-- 布局切换 -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">🖼️ 布局 (Layout)</div>
+                <div class="quick-filter-label">${i18n.layout}</div>
                 <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">瀑布流</button>
+                    <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">${i18n.masonry}</button>
                 </div>
             </div>
 
-            <button class="quick-filter-btn btn-reset" id="qf-reset">🔄 重置所有过滤器</button>
+            <button class="quick-filter-btn btn-reset" id="qf-reset">${i18n.reset}</button>
         `;
 
         const searchBox = document.querySelector(CONFIG.selectors.searchBox);

@@ -1,0 +1,47 @@
+{
+  "extName": {
+    "message": "Danbooru 增强"
+  },
+  "extDescription": {
+    "message": "为 Danbooru 添加快捷过滤和瀑布流布局。"
+  },
+  "rating_label": {
+    "message": "🛡️ 分级"
+  },
+  "sort_label": {
+    "message": "📊 排序"
+  },
+  "time_label": {
+    "message": "🕒 时间"
+  },
+  "layout_label": {
+    "message": "🖼️ 布局"
+  },
+  "reset_btn": {
+    "message": "🔄 重置所有过滤器"
+  },
+  "masonry_btn": {
+    "message": "瀑布流"
+  },
+  "sort_score": {
+    "message": "评分"
+  },
+  "sort_fav": {
+    "message": "收藏"
+  },
+  "sort_rank": {
+    "message": "排行"
+  },
+  "sort_latest": {
+    "message": "最新"
+  },
+  "time_today": {
+    "message": "今日"
+  },
+  "time_week": {
+    "message": "本周"
+  },
+  "time_month": {
+    "message": "本月"
+  }
+}

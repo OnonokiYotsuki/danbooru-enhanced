@@ -1,0 +1,47 @@
+{
+  "extName": {
+    "message": "Danbooru 拡張 (Danbooru Enhanced)"
+  },
+  "extDescription": {
+    "message": "Danbooru にクイックフィルターと Pinterest スタイルのタイル状レイアウト (Masonry) を追加します。"
+  },
+  "rating_label": {
+    "message": "🛡️ 評価 (Rating)"
+  },
+  "sort_label": {
+    "message": "📊 並び替え (Sort)"
+  },
+  "time_label": {
+    "message": "🕒 期間 (Time)"
+  },
+  "layout_label": {
+    "message": "🖼️ レイアウト (Layout)"
+  },
+  "reset_btn": {
+    "message": "🔄 すべてのリセット"
+  },
+  "masonry_btn": {
+    "message": "タイル状"
+  },
+  "sort_score": {
+    "message": "スコア"
+  },
+  "sort_fav": {
+    "message": "お気に入り"
+  },
+  "sort_rank": {
+    "message": "ランク"
+  },
+  "sort_latest": {
+    "message": "最新"
+  },
+  "time_today": {
+    "message": "今日"
+  },
+  "time_week": {
+    "message": "今週"
+  },
+  "time_month": {
+    "message": "今月"
+  }
+}

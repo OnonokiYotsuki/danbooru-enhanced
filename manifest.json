@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Danbooru Enhanced",
+  "name": "__MSG_extName__",
   "version": "1.0.0",
-  "description": "Enhance Danbooru with quick filters and Pinterest-style masonry layout / 为 Danbooru 添加快捷过滤和瀑布流布局",
+  "description": "__MSG_extDescription__",
+  "default_locale": "zh_CN",
   "permissions": ["activeTab"],
   "content_scripts": [
     {

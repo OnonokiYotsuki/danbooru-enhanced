@@ -1,0 +1,47 @@
+{
+  "extName": {
+    "message": "Danbooru Enhanced"
+  },
+  "extDescription": {
+    "message": "Enhance Danbooru with quick filters and Pinterest-style masonry layout."
+  },
+  "rating_label": {
+    "message": "🛡️ Rating"
+  },
+  "sort_label": {
+    "message": "📊 Sort"
+  },
+  "time_label": {
+    "message": "🕒 Time"
+  },
+  "layout_label": {
+    "message": "🖼️ Layout"
+  },
+  "reset_btn": {
+    "message": "🔄 Reset All Filters"
+  },
+  "masonry_btn": {
+    "message": "Masonry"
+  },
+  "sort_score": {
+    "message": "Score"
+  },
+  "sort_fav": {
+    "message": "Favs"
+  },
+  "sort_rank": {
+    "message": "Rank"
+  },
+  "sort_latest": {
+    "message": "Latest"
+  },
+  "time_today": {
+    "message": "Today"
+  },
+  "time_week": {
+    "message": "Week"
+  },
+  "time_month": {
+    "message": "Month"
+  }
+}
