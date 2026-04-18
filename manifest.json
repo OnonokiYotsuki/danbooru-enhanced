@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Danbooru Quick Filter",
-  "version": "1.0",
-  "description": "为 Danbooru 添加快捷排序和分级过滤按钮",
+  "name": "Danbooru Enhanced",
+  "version": "1.0.0",
+  "description": "Enhance Danbooru with quick filters and Pinterest-style masonry layout / 为 Danbooru 添加快捷过滤和瀑布流布局",
   "permissions": ["activeTab"],
   "content_scripts": [
     {
