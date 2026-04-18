@@ -115,8 +115,119 @@
     color: #dc3545;
 }
 
+/* 布局按钮样式 */
+.btn-layout-masonry {
+    border-left: 3px solid #6c5ce7;
+}
+
 /* 适配 Danbooru 的侧边栏宽度 */
 #sidebar #quick-filter-container {
     width: 100%;
     box-sizing: border-box;
+}
+
+/* ========== 瀑布流布局 (Masonry Layout) ========== */
+
+/*
+ * 紧凑瀑布流：每张图片宽度相同，高度按原始比例自适应，
+ * 图片之间紧密排列，无多余边框/背景/padding。
+ * 使用 CSS columns 实现，图片直接贴合。
+ */
+
+/* 画廊容器：覆盖默认 grid */
+.post-gallery.masonry-mode {
+    display: block !important;
+}
+
+/* 瀑布流容器：CSS columns 自动分列 */
+.post-gallery.masonry-mode .posts-container.masonry-container {
+    display: block !important;
+    column-width: 200px;
+    column-gap: 6px;
+    width: 100%;
+}
+
+/* 每个帖子卡片：紧凑无边框 */
+.post-gallery.masonry-mode .masonry-item {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 6px 0;
+    padding: 0;
+    break-inside: avoid;
+    border-radius: 6px;
+    overflow: hidden;
+    background: none;
+    border: none;
+    box-sizing: border-box;
+    position: relative;
+    line-height: 0; /* 消除 inline-block 底部间隙 */
+    transition: opacity 0.15s ease;
+}
+
+.post-gallery.masonry-mode .masonry-item:hover {
+    opacity: 0.85;
+}
+
+/* 覆盖 article 上所有可能的固定尺寸 */
+.post-gallery.masonry-mode .masonry-item,
+.post-gallery.masonry-mode .masonry-item[class*="post-preview"] {
+    width: 100% !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 0 6px 0 !important;
+    border: none !important;
+    background: none !important;
+    aspect-ratio: unset !important;
+}
+
+/* 内部所有容器：block 撑满，高度自适应 */
+.post-gallery.masonry-mode .masonry-item .post-preview-container {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    line-height: 0;
+    aspect-ratio: unset !important;
+}
+
+.post-gallery.masonry-mode .masonry-item .post-preview-link,
+.post-gallery.masonry-mode .masonry-item picture {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    line-height: 0;
+}
+
+/* 图片：宽度撑满列宽，高度按原始比例完整显示，不裁切 */
+.post-gallery.masonry-mode .masonry-item .post-preview-image {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    display: block !important;
+    object-fit: unset !important;
+    aspect-ratio: unset !important;
+    border-radius: 6px;
+}
+
+/* 动画/视频时长标签 */
+.post-gallery.masonry-mode .masonry-item .post-animation-icon {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.7em;
+    line-height: normal;
 }

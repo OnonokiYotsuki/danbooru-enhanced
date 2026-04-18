@@ -1,6 +1,6 @@
 /**
- * Danbooru Quick Filter Extension - v2
- * 增强版：支持更多分级、多种排序和时间范围过滤。
+ * Danbooru Quick Filter Extension - v3
+ * 增强版：支持更多分级、多种排序、时间范围过滤和瀑布流布局。
  */
 
 (function() {
@@ -11,7 +11,16 @@
             sidebar: '#sidebar',
             searchBox: '#search-box',
             tagInput: '#tags',
-            searchForm: '#search-box form'
+            searchForm: '#search-box form',
+            postGallery: '.post-gallery',
+            postsContainer: '.posts-container',
+            postPreview: 'article.post-preview',
+            postPreviewImage: 'img.post-preview-image'
+        },
+        masonry: {
+            storageKey: 'danbooru-qf-masonry-enabled',
+            columnWidth: 200,  // 每列宽度 (px)
+            gap: 6             // 列间距 (px)
         }
     };
 
@@ -91,6 +100,139 @@
         };
     }
 
+    // ========== 瀑布流布局 (Masonry Layout) ==========
+
+    let masonryEnabled = localStorage.getItem(CONFIG.masonry.storageKey) === 'true';
+    let masonryObserver = null;
+
+    function isMasonryEnabled() {
+        return masonryEnabled;
+    }
+
+    function setMasonryEnabled(enabled) {
+        masonryEnabled = enabled;
+        localStorage.setItem(CONFIG.masonry.storageKey, enabled ? 'true' : 'false');
+        if (enabled) {
+            applyMasonryLayout();
+        } else {
+            removeMasonryLayout();
+        }
+        updateMasonryButtonState();
+    }
+
+    function updateMasonryButtonState() {
+        const btn = document.querySelector('#qf-masonry-toggle');
+        if (!btn) return;
+        if (masonryEnabled) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    }
+
+    function applyMasonryLayout() {
+        const gallery = document.querySelector(CONFIG.selectors.postGallery);
+        const container = document.querySelector(CONFIG.selectors.postsContainer);
+        if (!gallery || !container) return;
+
+        // 添加瀑布流标记 class
+        gallery.classList.add('masonry-mode');
+        container.classList.add('masonry-container');
+
+        // 移除画廊上 Danbooru 的固定尺寸 class（如 post-gallery-grid, post-gallery-180）
+        gallery.classList.forEach(cls => {
+            if (cls.startsWith('post-gallery-') && cls !== 'post-gallery') {
+                gallery.classList.add('masonry-removed-' + cls);
+                gallery.classList.remove(cls);
+            }
+        });
+
+        const articles = container.querySelectorAll(CONFIG.selectors.postPreview);
+        articles.forEach(article => {
+            article.classList.add('masonry-item');
+
+            // 移除 Danbooru 的固定尺寸 class（如 post-preview-180, post-preview-fit-compact）
+            article.classList.forEach(cls => {
+                if (cls.startsWith('post-preview-') && cls !== 'post-preview') {
+                    article.dataset.masonryRemoved = (article.dataset.masonryRemoved || '') + ' ' + cls;
+                    article.classList.remove(cls);
+                }
+            });
+
+            const img = article.querySelector(CONFIG.selectors.postPreviewImage);
+            if (!img) return;
+
+            // 保存原始尺寸属性以便恢复
+            if (img.hasAttribute('width')) {
+                img.dataset.masonryOrigWidth = img.getAttribute('width');
+                img.removeAttribute('width');
+            }
+            if (img.hasAttribute('height')) {
+                img.dataset.masonryOrigHeight = img.getAttribute('height');
+                img.removeAttribute('height');
+            }
+
+            // 清除内联 style 中可能的固定尺寸
+            img.style.width = '';
+            img.style.height = '';
+            img.style.maxHeight = '';
+            img.style.minHeight = '';
+
+            // 使用 2x srcset 图片以获得更好的质量
+            const source = article.querySelector('source[srcset]');
+            if (source) {
+                const srcset = source.getAttribute('srcset');
+                const match = srcset.match(/,\s*(\S+)\s+2x/);
+                if (match) {
+                    img.dataset.masonryOrigSrc = img.src;
+                    img.src = match[1];
+                }
+            }
+
+            // 同样清除 post-preview-container 上的内联样式
+            const previewContainer = article.querySelector('.post-preview-container');
+            if (previewContainer) {
+                previewContainer.style.width = '';
+                previewContainer.style.height = '';
+                previewContainer.style.maxHeight = '';
+            }
+        });
+    }
+
+    function removeMasonryLayout() {
+        const gallery = document.querySelector(CONFIG.selectors.postGallery);
+        const container = document.querySelector(CONFIG.selectors.postsContainer);
+        if (!gallery || !container) return;
+
+        gallery.classList.remove('masonry-mode');
+        container.classList.remove('masonry-container');
+
+        const articles = container.querySelectorAll(CONFIG.selectors.postPreview);
+        articles.forEach(article => {
+            article.classList.remove('masonry-item');
+        });
+
+        // 恢复页面需要刷新以还原原始图片尺寸
+        // 简单方案：直接刷新页面
+        location.reload();
+    }
+
+    // 在页面加载完成后自动应用瀑布流（如果已启用）
+    function initMasonry() {
+        if (masonryEnabled) {
+            // 等待图片容器出现
+            const waitForGallery = setInterval(() => {
+                const container = document.querySelector(CONFIG.selectors.postsContainer);
+                if (container) {
+                    clearInterval(waitForGallery);
+                    applyMasonryLayout();
+                }
+            }, 100);
+            // 5秒超时
+            setTimeout(() => clearInterval(waitForGallery), 5000);
+        }
+    }
+
     function injectUI() {
         const sidebar = document.querySelector(CONFIG.selectors.sidebar);
         if (!sidebar || document.querySelector('#quick-filter-container')) return;
@@ -134,6 +276,14 @@
                 </div>
             </div>
 
+            <!-- 布局切换 -->
+            <div class="quick-filter-section">
+                <div class="quick-filter-label">🖼️ 布局 (Layout)</div>
+                <div class="quick-filter-group">
+                    <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">瀑布流</button>
+                </div>
+            </div>
+
             <button class="quick-filter-btn btn-reset" id="qf-reset">🔄 重置所有过滤器</button>
         `;
 
@@ -151,6 +301,11 @@
 
             if (btn.id === 'qf-reset') {
                 applyFilter({ rating: null, order: null, age: null });
+                return;
+            }
+
+            if (btn.id === 'qf-masonry-toggle') {
+                setMasonryEnabled(!isMasonryEnabled());
                 return;
             }
 
@@ -180,7 +335,17 @@
 
     const observer = new MutationObserver(() => {
         if (!document.querySelector('#quick-filter-container')) injectUI();
+        // 如果瀑布流已启用但容器没有 masonry 标记，重新应用
+        if (masonryEnabled) {
+            const container = document.querySelector(CONFIG.selectors.postsContainer);
+            if (container && !container.classList.contains('masonry-container')) {
+                applyMasonryLayout();
+            }
+        }
     });
     observer.observe(document.body, { childList: true, subtree: true });
+
+    // 初始化瀑布流
+    initMasonry();
 
 })();
