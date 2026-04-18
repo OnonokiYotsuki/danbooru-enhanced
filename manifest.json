@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Danbooru Quick Filter",
+  "version": "1.0",
+  "description": "为 Danbooru 添加快捷排序和分级过滤按钮",
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["*://danbooru.donmai.us/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ]
+}
