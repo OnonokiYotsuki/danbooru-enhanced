@@ -227,6 +227,9 @@
     font-size: 0.9em;
 }
 
+/* 每页数量按钮 */
+.btn-limit { border-bottom: 2px solid var(--azure-4); }
+
 /* 图片属性按钮 */
 .btn-img-landscape { border-left: 3px solid var(--azure-4); }
 .btn-img-portrait { border-left: 3px solid var(--purple-4); }

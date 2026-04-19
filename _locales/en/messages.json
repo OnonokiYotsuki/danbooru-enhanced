@@ -95,6 +95,9 @@
   "tag_placeholder": {
     "message": "Search tags..."
   },
+  "limit_label": {
+    "message": "📄 Per Page"
+  },
   "image_label": {
     "message": "📐 Image"
   },

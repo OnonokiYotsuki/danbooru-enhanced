@@ -43,7 +43,7 @@
     let filterState = {
         rating: null, order: null, age: null,
         filetype: null, score: null, favcount: null,
-        ratio: null, width: null
+        ratio: null, width: null, limit: null
     };
 
     /** 从搜索框当前内容初始化面板状态 */
@@ -167,6 +167,7 @@
             favcount: (tags.match(/\bfavcount:([^\s]+)/i) || [])[1],
             ratio: (tags.match(/\bratio:([^\s]+)/i) || [])[1],
             width: (tags.match(/\bwidth:([^\s]+)/i) || [])[1],
+            limit: (tags.match(/\blimit:([^\s]+)/i) || [])[1],
         };
     }
 
@@ -524,6 +525,7 @@
             fav_label: chrome.i18n.getMessage('fav_label'),
             fav_placeholder: chrome.i18n.getMessage('fav_placeholder'),
             search_btn: chrome.i18n.getMessage('search_btn'),
+            limit_label: chrome.i18n.getMessage('limit_label'),
             image_label: chrome.i18n.getMessage('image_label'),
             img_landscape: chrome.i18n.getMessage('img_landscape'),
             img_portrait: chrome.i18n.getMessage('img_portrait'),
@@ -609,6 +611,17 @@
                 </div>
             </div>
 
+            <!-- 每页数量 -->
+            <div class="quick-filter-section">
+                <div class="quick-filter-label">${i18n.limit_label}</div>
+                <div class="quick-filter-group">
+                    <button class="quick-filter-btn btn-limit ${state.limit === '20' ? 'active' : ''}" data-type="limit" data-val="20">20</button>
+                    <button class="quick-filter-btn btn-limit ${state.limit === '40' ? 'active' : ''}" data-type="limit" data-val="40">40</button>
+                    <button class="quick-filter-btn btn-limit ${state.limit === '100' ? 'active' : ''}" data-type="limit" data-val="100">100</button>
+                    <button class="quick-filter-btn btn-limit ${state.limit === '200' ? 'active' : ''}" data-type="limit" data-val="200">200</button>
+                </div>
+            </div>
+
             <!-- 布局切换 -->
             <div class="quick-filter-section">
                 <div class="quick-filter-label">${i18n.layout}</div>
@@ -661,7 +674,7 @@
                 applyFilter({
                     rating: null, order: null, age: null,
                     filetype: null, score: null, favcount: null,
-                    ratio: null, width: null
+                    ratio: null, width: null, limit: null
                 });
                 const ti = document.querySelector(CONFIG.selectors.tagInput);
                 if (ti) ti.value = '';

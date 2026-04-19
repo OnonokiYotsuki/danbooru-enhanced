@@ -95,6 +95,9 @@
   "tag_placeholder": {
     "message": "输入标签搜索..."
   },
+  "limit_label": {
+    "message": "📄 每页"
+  },
   "image_label": {
     "message": "📐 图片"
   },

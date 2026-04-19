@@ -95,6 +95,9 @@
   "tag_placeholder": {
     "message": "Поиск по тегам..."
   },
+  "limit_label": {
+    "message": "📄 На странице"
+  },
   "image_label": {
     "message": "📐 Изображение"
   },

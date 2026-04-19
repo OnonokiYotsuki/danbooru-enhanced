@@ -95,6 +95,9 @@
   "tag_placeholder": {
     "message": "タグを検索..."
   },
+  "limit_label": {
+    "message": "📄 表示数"
+  },
   "image_label": {
     "message": "📐 画像"
   },
