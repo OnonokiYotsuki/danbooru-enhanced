@@ -162,6 +162,8 @@
 }
 
 /* 特定颜色点缀 - 使用 Danbooru 主题变量 */
+.btn-rating-sfw { border-left: 3px solid var(--green-4); font-weight: 700; }
+.btn-rating-nsfw { border-left: 3px solid var(--red-4); font-weight: 700; }
 .btn-rating-g { border-left: 3px solid var(--green-4); }
 .btn-rating-s { border-left: 3px solid var(--azure-4); }
 .btn-rating-q { border-left: 3px solid var(--yellow-4); }

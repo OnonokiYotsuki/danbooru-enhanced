@@ -116,11 +116,19 @@
         if (form) form.submit();
     }
 
+    const PRESET_MAP = { sfw: 'g,s', nsfw: 'q,e' };
+
     function updateButtonStates() {
         const buttons = document.querySelectorAll('.quick-filter-btn');
 
         buttons.forEach(btn => {
-            const { type, val, composite } = btn.dataset;
+            const { type, val, composite, preset } = btn.dataset;
+
+            // SFW/NSFW 预设按钮
+            if (preset) {
+                btn.classList.toggle('active', filterState.rating === PRESET_MAP[preset]);
+                return;
+            }
 
             // 复合过滤器按钮
             if (composite) {
@@ -543,6 +551,8 @@
             <div class="quick-filter-section">
                 <div class="quick-filter-label">${i18n.rating}</div>
                 <div class="quick-filter-group">
+                    <button class="quick-filter-btn btn-rating-sfw" data-preset="sfw">SFW</button>
+                    <button class="quick-filter-btn btn-rating-nsfw" data-preset="nsfw">NSFW</button>
                     <button class="quick-filter-btn btn-rating-g ${isRatingActive('g') ? 'active' : ''}" data-type="rating" data-val="g">G</button>
                     <button class="quick-filter-btn btn-rating-s ${isRatingActive('s') ? 'active' : ''}" data-type="rating" data-val="s">S</button>
                     <button class="quick-filter-btn btn-rating-q ${isRatingActive('q') ? 'active' : ''}" data-type="rating" data-val="q">Q</button>
@@ -683,6 +693,21 @@
 
             if (btn.id === 'qf-masonry-toggle') {
                 setMasonryEnabled(!isMasonryEnabled());
+                return;
+            }
+
+            // SFW/NSFW 快捷预设
+            const { preset } = btn.dataset;
+            if (preset) {
+                const presetMap = { sfw: 'g,s', nsfw: 'q,e' };
+                const target = presetMap[preset];
+                // 如果当前 rating 已经是该预设值，则取消
+                if (filterState.rating === target) {
+                    filterState.rating = null;
+                } else {
+                    filterState.rating = target;
+                }
+                updateButtonStates();
                 return;
             }
 
