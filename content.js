@@ -33,16 +33,37 @@
         let tags = currentTags.split(/\s+/).filter(t => t.trim().length > 0);
         
         for (const key in updates) {
-            // 移除现有的同类标签 (例如移除原有所有 rating:*)
-            tags = tags.filter(t => !t.startsWith(`${key}:`));
+            const val = updates[key];
             
-            // 如果是时间范围 (age)，我们也视其为一种 meta 标签
-            if (key === 'age') {
-                tags = tags.filter(t => !t.startsWith('age:'));
-            }
+            if (key === 'rating' && val !== null) {
+                // 多选切换逻辑
+                let existingTag = tags.find(t => t.startsWith('rating:'));
+                let ratings = existingTag ? existingTag.split(':')[1].split(',').filter(Boolean) : [];
+                
+                if (ratings.includes(val)) {
+                    ratings = ratings.filter(r => r !== val);
+                } else {
+                    ratings.push(val);
+                }
+                
+                tags = tags.filter(t => !t.startsWith('rating:'));
+                if (ratings.length > 0) {
+                    // 保持固定顺序: g, s, q, e
+                    const order = ['g', 's', 'q', 'e'];
+                    ratings.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+                    tags.push(`rating:${ratings.join(',')}`);
+                }
+            } else {
+                // 单选逻辑 (或 rating 设为 null 时清除)
+                tags = tags.filter(t => !t.startsWith(`${key}:`));
+                
+                if (key === 'age') {
+                    tags = tags.filter(t => !t.startsWith('age:'));
+                }
 
-            if (updates[key]) {
-                tags.push(`${key}:${updates[key]}`);
+                if (val) {
+                    tags.push(`${key}:${val}`);
+                }
             }
         }
         
@@ -69,7 +90,6 @@
         buttons.forEach(btn => {
             const { type, val } = btn.dataset;
             if (!type) {
-                // 处理重置按钮或其他无 dataset 的按钮
                 if (btn.id === 'qf-reset') return;
                 return;
             }
@@ -78,8 +98,10 @@
             const currentVal = state[type];
 
             if (type === 'order' && val === '') {
-                // 特殊处理“最新”按钮
                 isActive = !currentVal;
+            } else if (type === 'rating' && currentVal) {
+                // 分级支持多选显示
+                isActive = currentVal.split(',').includes(val);
             } else {
                 isActive = (currentVal === val);
             }
@@ -94,7 +116,7 @@
 
     function getActiveState(tags) {
         return {
-            rating: (tags.match(/\brating:([gsqe])\b/i) || [])[1],
+            rating: (tags.match(/\brating:([gsqe,]+)\b/i) || [])[1],
             order: (tags.match(/\border:(\w+)\b/i) || [])[1],
             age: (tags.match(/\bage:(<[^\s]+)/i) || [])[1]
         };
@@ -390,15 +412,17 @@
             month: chrome.i18n.getMessage('time_month')
         };
 
+        const isRatingActive = (val) => (state.rating || '').split(',').includes(val);
+
         container.innerHTML = `
             <!-- 分级过滤 -->
             <div class="quick-filter-section">
                 <div class="quick-filter-label">${i18n.rating}</div>
                 <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-rating-g ${state.rating === 'g' ? 'active' : ''}" data-type="rating" data-val="g">G</button>
-                    <button class="quick-filter-btn btn-rating-s ${state.rating === 's' ? 'active' : ''}" data-type="rating" data-val="s">S</button>
-                    <button class="quick-filter-btn btn-rating-q ${state.rating === 'q' ? 'active' : ''}" data-type="rating" data-val="q">Q</button>
-                    <button class="quick-filter-btn btn-rating-e ${state.rating === 'e' ? 'active' : ''}" data-type="rating" data-val="e">E</button>
+                    <button class="quick-filter-btn btn-rating-g ${isRatingActive('g') ? 'active' : ''}" data-type="rating" data-val="g">G</button>
+                    <button class="quick-filter-btn btn-rating-s ${isRatingActive('s') ? 'active' : ''}" data-type="rating" data-val="s">S</button>
+                    <button class="quick-filter-btn btn-rating-q ${isRatingActive('q') ? 'active' : ''}" data-type="rating" data-val="q">Q</button>
+                    <button class="quick-filter-btn btn-rating-e ${isRatingActive('e') ? 'active' : ''}" data-type="rating" data-val="e">E</button>
                 </div>
             </div>
 
@@ -458,11 +482,16 @@
 
             const { type, val } = btn.dataset;
             if (type) {
-                // 如果按钮已经是激活状态，则点击它代表取消该过滤条件
-                if (btn.classList.contains('active')) {
-                    applyFilter({ [type]: null });
+                if (type === 'rating') {
+                    // 分级采用多选切换逻辑
+                    applyFilter({ [type]: val });
                 } else {
-                    applyFilter({ [type]: val || null });
+                    // 其他类型维持单选切换逻辑
+                    if (btn.classList.contains('active')) {
+                        applyFilter({ [type]: null });
+                    } else {
+                        applyFilter({ [type]: val || null });
+                    }
                 }
             }
         });
@@ -471,6 +500,8 @@
         if (input) {
             input.addEventListener('input', updateButtonStates);
         }
+        // 初始更新所有按钮状态
+        updateButtonStates();
     }
 
     // 初始化
