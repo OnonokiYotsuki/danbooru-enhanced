@@ -18,7 +18,7 @@
       "128": "_locales/icon.png"
     }
   },
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage"],
   "content_scripts": [
     {
       "matches": ["*://danbooru.donmai.us/*"],

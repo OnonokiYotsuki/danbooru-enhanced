@@ -21,7 +21,8 @@
             storageKey: 'danbooru-qf-masonry-enabled',
             columnWidth: 200,  // 每列宽度 (px)
             gap: 6             // 列间距 (px)
-        }
+        },
+        filterStateKey: 'danbooru-qf-filter-state'
     };
 
     /**
@@ -45,6 +46,34 @@
         filetype: null, score: null, favcount: null,
         ratio: null, width: null, limit: null
     };
+
+    /** 将 filterState 持久化到 chrome.storage.local */
+    function saveFilterState() {
+        try {
+            chrome.storage.local.set({ [CONFIG.filterStateKey]: filterState });
+        } catch (e) {
+            // fallback: 忽略存储错误
+        }
+    }
+
+    /** 从 chrome.storage.local 恢复 filterState（异步），完成后回调 */
+    function loadFilterState(callback) {
+        try {
+            chrome.storage.local.get(CONFIG.filterStateKey, (result) => {
+                const saved = result[CONFIG.filterStateKey];
+                if (saved && typeof saved === 'object') {
+                    for (const key in filterState) {
+                        if (key in saved && saved[key] !== undefined) {
+                            filterState[key] = saved[key];
+                        }
+                    }
+                }
+                if (callback) callback();
+            });
+        } catch (e) {
+            if (callback) callback();
+        }
+    }
 
     /** 从搜索框当前内容初始化面板状态 */
     function initFilterState() {
@@ -82,6 +111,7 @@
                 filterState[key] = val || null;
             }
         }
+        saveFilterState();
         updateButtonStates();
     }
 
@@ -134,6 +164,7 @@
 
         input.value = tags.join(' ');
 
+        saveFilterState();
         const form = document.querySelector(CONFIG.selectors.searchForm);
         if (form) form.submit();
     }
@@ -743,8 +774,23 @@
         }
 
         // 从搜索框初始化面板状态（会清理搜索框中的 metatag）
+        // 先从 URL 搜索框解析，再合并持久化存储中的状态
         initFilterState();
-        updateButtonStates();
+        loadFilterState(() => {
+            // URL 中的 metatag 优先级高于存储的状态
+            // initFilterState 已经解析了 URL，这里用 URL 的值覆盖存储值
+            const input = document.querySelector(CONFIG.selectors.tagInput);
+            if (input) {
+                const urlState = getActiveState(location.search || '');
+                // 如果 URL 中有某个 metatag，则以 URL 为准
+                for (const key in filterState) {
+                    if (urlState[key]) {
+                        filterState[key] = urlState[key];
+                    }
+                }
+            }
+            updateButtonStates();
+        });
 
         // 委托处理所有过滤按钮点击
         container.addEventListener('click', (e) => {
@@ -757,6 +803,7 @@
                     filetype: null, score: null, favcount: null,
                     ratio: null, width: null, limit: null
                 });
+                // applyFilter 已调用 saveFilterState
                 const ti = document.querySelector(CONFIG.selectors.tagInput);
                 if (ti) ti.value = '';
                 return;
@@ -791,6 +838,7 @@
                 } else {
                     filterState.rating = target;
                 }
+                saveFilterState();
                 updateButtonStates();
                 return;
             }
@@ -823,6 +871,47 @@
                 }
             }
         });
+
+        // 监听输入框的 input 和 change 事件，实时同步状态到 filterState 并持久化
+        container.addEventListener('input', (e) => {
+            const id = e.target.id;
+            if (['qf-score-input', 'qf-fav-input', 'qf-age-input'].includes(id)) {
+                filterUpdateFromInputs();
+                saveFilterState();
+            }
+        });
+
+        container.addEventListener('change', (e) => {
+            if (e.target.id === 'qf-age-unit') {
+                filterUpdateFromInputs();
+                saveFilterState();
+            }
+        });
+    }
+
+    /** 从 UI 输入组件读取当前值并同步更新到 filterState 内部变量 */
+    function filterUpdateFromInputs() {
+        const scoreInput = document.querySelector('#qf-score-input');
+        const favInput = document.querySelector('#qf-fav-input');
+        const ageInput = document.querySelector('#qf-age-input');
+        const ageUnit = document.querySelector('#qf-age-unit');
+
+        if (scoreInput) filterState.score = scoreInput.value.trim() || null;
+        if (favInput) filterState.favcount = favInput.value.trim() || null;
+        
+        if (ageInput && ageUnit) {
+            let val = ageInput.value.trim();
+            if (val) {
+                const rangeMatch = val.match(/^(\d+)\.\.(\d+)$/);
+                if (rangeMatch) {
+                    val = `${rangeMatch[1]}${ageUnit.value}..${rangeMatch[2]}${ageUnit.value}`;
+                } else {
+                    if (val.match(/^\d+$/)) val = '<' + val;
+                    if (!val.match(/(d|w|mo|y)$/i)) val += ageUnit.value;
+                }
+            }
+            filterState.age = val || null;
+        }
     }
 
     // 初始化
