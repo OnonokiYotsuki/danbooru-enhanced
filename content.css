@@ -13,6 +13,38 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+.qf-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 2px 0 2px;
+    margin-top: 4px;
+}
+
+.qf-title {
+    font-size: 1.1em;
+    font-weight: 800;
+    color: var(--text-color);
+    letter-spacing: 0.5px;
+}
+
+.qf-github-link {
+    color: var(--muted-text-color);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.qf-github-link:hover {
+    color: var(--link-color);
+    transform: scale(1.1);
+}
+
+.qf-github-icon {
+    width: 20px;
+    height: 20px;
+}
+
 /* 原生搜索框嵌入面板后的美化 */
 #quick-filter-container #search-box {
     margin: 0;
