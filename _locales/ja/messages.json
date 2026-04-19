@@ -35,6 +35,21 @@
   "sort_latest": {
     "message": "最新"
   },
+  "sort_comment": {
+    "message": "コメント"
+  },
+  "sort_change": {
+    "message": "更新順"
+  },
+  "sort_random": {
+    "message": "ランダム"
+  },
+  "sort_mpixels": {
+    "message": "高解像度"
+  },
+  "sort_filesize": {
+    "message": "ファイルサイズ"
+  },
   "time_today": {
     "message": "今日"
   },
@@ -43,5 +58,53 @@
   },
   "time_month": {
     "message": "今月"
+  },
+  "time_quarter": {
+    "message": "3ヶ月"
+  },
+  "time_year": {
+    "message": "今年"
+  },
+  "type_label": {
+    "message": "📁 タイプ"
+  },
+  "type_static": {
+    "message": "静止画"
+  },
+  "type_animated": {
+    "message": "動画"
+  },
+  "score_label": {
+    "message": "⭐ スコア"
+  },
+  "score_placeholder": {
+    "message": ">50, 10..100"
+  },
+  "fav_label": {
+    "message": "❤️ お気に入り"
+  },
+  "fav_placeholder": {
+    "message": ">50, 10..100"
+  },
+  "apply_btn": {
+    "message": "適用"
+  },
+  "search_btn": {
+    "message": "検索"
+  },
+  "tag_placeholder": {
+    "message": "タグを検索..."
+  },
+  "image_label": {
+    "message": "📐 画像"
+  },
+  "img_landscape": {
+    "message": "横向き"
+  },
+  "img_portrait": {
+    "message": "縦向き"
+  },
+  "img_hd": {
+    "message": "高解像度"
   }
 }

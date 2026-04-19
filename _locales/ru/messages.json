@@ -35,6 +35,21 @@
   "sort_latest": {
     "message": "Новое"
   },
+  "sort_comment": {
+    "message": "Комментарии"
+  },
+  "sort_change": {
+    "message": "Обновлённые"
+  },
+  "sort_random": {
+    "message": "Случайно"
+  },
+  "sort_mpixels": {
+    "message": "Разрешение"
+  },
+  "sort_filesize": {
+    "message": "Размер файла"
+  },
   "time_today": {
     "message": "Сегодня"
   },
@@ -43,5 +58,53 @@
   },
   "time_month": {
     "message": "Месяц"
+  },
+  "time_quarter": {
+    "message": "3 месяца"
+  },
+  "time_year": {
+    "message": "Год"
+  },
+  "type_label": {
+    "message": "📁 Тип"
+  },
+  "type_static": {
+    "message": "Статика"
+  },
+  "type_animated": {
+    "message": "Анимация"
+  },
+  "score_label": {
+    "message": "⭐ Оценка"
+  },
+  "score_placeholder": {
+    "message": ">50, 10..100"
+  },
+  "fav_label": {
+    "message": "❤️ Избранное"
+  },
+  "fav_placeholder": {
+    "message": ">50, 10..100"
+  },
+  "apply_btn": {
+    "message": "Применить"
+  },
+  "search_btn": {
+    "message": "Поиск"
+  },
+  "tag_placeholder": {
+    "message": "Поиск по тегам..."
+  },
+  "image_label": {
+    "message": "📐 Изображение"
+  },
+  "img_landscape": {
+    "message": "Альбомная"
+  },
+  "img_portrait": {
+    "message": "Портретная"
+  },
+  "img_hd": {
+    "message": "HD"
   }
 }

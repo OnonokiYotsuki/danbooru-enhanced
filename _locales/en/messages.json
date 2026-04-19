@@ -35,6 +35,21 @@
   "sort_latest": {
     "message": "Latest"
   },
+  "sort_comment": {
+    "message": "Comments"
+  },
+  "sort_change": {
+    "message": "Updated"
+  },
+  "sort_random": {
+    "message": "Random"
+  },
+  "sort_mpixels": {
+    "message": "Hi-Res"
+  },
+  "sort_filesize": {
+    "message": "File Size"
+  },
   "time_today": {
     "message": "Today"
   },
@@ -43,5 +58,53 @@
   },
   "time_month": {
     "message": "Month"
+  },
+  "time_quarter": {
+    "message": "3 Months"
+  },
+  "time_year": {
+    "message": "Year"
+  },
+  "type_label": {
+    "message": "📁 Type"
+  },
+  "type_static": {
+    "message": "Static"
+  },
+  "type_animated": {
+    "message": "Animated"
+  },
+  "score_label": {
+    "message": "⭐ Score"
+  },
+  "score_placeholder": {
+    "message": ">50, 10..100"
+  },
+  "fav_label": {
+    "message": "❤️ Favorites"
+  },
+  "fav_placeholder": {
+    "message": ">50, 10..100"
+  },
+  "apply_btn": {
+    "message": "Apply"
+  },
+  "search_btn": {
+    "message": "Search"
+  },
+  "tag_placeholder": {
+    "message": "Search tags..."
+  },
+  "image_label": {
+    "message": "📐 Image"
+  },
+  "img_landscape": {
+    "message": "Landscape"
+  },
+  "img_portrait": {
+    "message": "Portrait"
+  },
+  "img_hd": {
+    "message": "HD"
   }
 }

@@ -35,6 +35,21 @@
   "sort_latest": {
     "message": "最新"
   },
+  "sort_comment": {
+    "message": "评论"
+  },
+  "sort_change": {
+    "message": "更新"
+  },
+  "sort_random": {
+    "message": "随机"
+  },
+  "sort_mpixels": {
+    "message": "高清"
+  },
+  "sort_filesize": {
+    "message": "大文件"
+  },
   "time_today": {
     "message": "今日"
   },
@@ -43,5 +58,53 @@
   },
   "time_month": {
     "message": "本月"
+  },
+  "time_quarter": {
+    "message": "近三月"
+  },
+  "time_year": {
+    "message": "今年"
+  },
+  "type_label": {
+    "message": "📁 类型"
+  },
+  "type_static": {
+    "message": "静图"
+  },
+  "type_animated": {
+    "message": "动图"
+  },
+  "score_label": {
+    "message": "⭐ 评分"
+  },
+  "score_placeholder": {
+    "message": ">50, 10..100"
+  },
+  "fav_label": {
+    "message": "❤️ 收藏"
+  },
+  "fav_placeholder": {
+    "message": ">50, 10..100"
+  },
+  "apply_btn": {
+    "message": "应用"
+  },
+  "search_btn": {
+    "message": "搜索"
+  },
+  "tag_placeholder": {
+    "message": "输入标签搜索..."
+  },
+  "image_label": {
+    "message": "📐 图片"
+  },
+  "img_landscape": {
+    "message": "横屏"
+  },
+  "img_portrait": {
+    "message": "竖屏"
+  },
+  "img_hd": {
+    "message": "高清"
   }
 }

@@ -13,6 +13,84 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+/* 原生搜索框嵌入面板后的美化 */
+#quick-filter-container #search-box {
+    margin: 0;
+    padding: 0;
+}
+
+#quick-filter-container #search-box h1,
+#quick-filter-container #search-box .search-help {
+    display: none !important;
+}
+
+#quick-filter-container #search-box form {
+    display: flex;
+    gap: 4px;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
+}
+
+#quick-filter-container #search-box #tags {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 10px !important;
+    font-size: 0.85em !important;
+    border: 1px solid var(--default-border-color) !important;
+    border-radius: 6px !important;
+    background-color: var(--form-button-background) !important;
+    color: var(--form-button-text-color) !important;
+    outline: none !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: var(--body-font);
+    box-sizing: border-box;
+    height: auto !important;
+    width: auto !important;
+}
+
+#quick-filter-container #search-box #tags:focus {
+    border-color: var(--link-color) !important;
+    box-shadow: 0 0 0 3px rgba(var(--link-color-rgb, 56, 132, 244), 0.12);
+}
+
+/* 隐藏原生提交按钮（用我们自己的） */
+#quick-filter-container #search-box form input[type="submit"],
+#quick-filter-container #search-box form button[type="submit"] {
+    display: none !important;
+}
+
+.qf-search-submit {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    font-size: 0.85em;
+    font-weight: 700;
+    border: 1px solid var(--link-color);
+    border-radius: 6px;
+    background-color: var(--link-color);
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.qf-search-submit:hover {
+    opacity: 0.88;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.qf-search-submit:active {
+    transform: scale(0.95);
+}
+
+/* 分隔线 */
+.qf-divider {
+    height: 1px;
+    background: var(--default-border-color);
+    margin: 2px 0;
+    opacity: 0.5;
+}
+
 .quick-filter-section {
     display: flex;
     flex-direction: column;
@@ -92,7 +170,67 @@
 .btn-sort-score { border-bottom: 2px solid var(--yellow-4); }
 .btn-sort-fav { border-bottom: 2px solid var(--magenta-4); }
 .btn-sort-rank { border-bottom: 2px solid var(--purple-4); }
+.btn-sort-comment { border-bottom: 2px solid var(--azure-4); }
+.btn-sort-change { border-bottom: 2px solid var(--orange-2, #e8a040); }
+.btn-sort-random { border-bottom: 2px solid var(--red-4); }
+.btn-sort-mpixels { border-bottom: 2px solid var(--cyan-4, #22d3ee); }
+.btn-sort-filesize { border-bottom: 2px solid var(--magenta-4); }
 .btn-sort-latest { border-bottom: 2px solid var(--green-4); }
+
+/* 文件类型按钮 */
+.btn-type-static { border-left: 3px solid var(--azure-4); }
+.btn-type-animated { border-left: 3px solid var(--magenta-4); }
+
+/* 评分/收藏范围输入 */
+.quick-filter-range-labels {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+
+.quick-filter-range-labels .quick-filter-range-label {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.7em;
+    font-weight: 700;
+    color: var(--muted-text-color);
+    white-space: nowrap;
+}
+
+.quick-filter-range {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.quick-filter-input {
+    flex: 1;
+    min-width: 0;
+    padding: 3px 8px;
+    font-size: 0.8em;
+    border: 1px solid var(--default-border-color);
+    border-radius: 4px;
+    background-color: var(--form-button-background);
+    color: var(--form-button-text-color);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.quick-filter-input:focus {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 2px rgba(var(--link-color-rgb, 56, 132, 244), 0.15);
+}
+
+.quick-filter-input::placeholder {
+    color: var(--muted-text-color);
+    opacity: 0.7;
+    font-size: 0.9em;
+}
+
+/* 图片属性按钮 */
+.btn-img-landscape { border-left: 3px solid var(--azure-4); }
+.btn-img-portrait { border-left: 3px solid var(--purple-4); }
+.btn-img-hd { border-left: 3px solid var(--green-4); }
 
 .btn-reset {
     margin-top: 5px;
@@ -126,7 +264,7 @@
 /*
  * 紧凑瀑布流：每张图片宽度相同，高度按原始比例自适应，
  * 图片之间紧密排列，无多余边框/背景/padding。
- * 使用 CSS columns 实现，图片直接贴合。
+ * 使用 JS 绝对定位实现按行排序的瀑布流布局。
  */
 
 /* 画廊容器：覆盖默认 grid */
