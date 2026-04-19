@@ -1,9 +1,9 @@
 {
   "extName": {
-    "message": "Danbooru Enhanced"
+    "message": "Danbooru Улучшенный"
   },
   "extDescription": {
-    "message": "Улучшает Danbooru быстрыми фильтрами и плиточной раскладкой в стиле Pinterest."
+    "message": "Добавляет панель быстрых фильтров и каскадную раскладку для улучшения просмотра Danbooru."
   },
   "rating_label": {
     "message": "🛡️ Рейтинг (Rating)"

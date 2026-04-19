@@ -1,9 +1,9 @@
 {
   "extName": {
-    "message": "Danbooru 拡張 (Danbooru Enhanced)"
+    "message": "Danbooru 拡張"
   },
   "extDescription": {
-    "message": "Danbooru にクイックフィルターと Pinterest スタイルのタイル状レイアウト (Masonry) を追加します。"
+    "message": "Danbooruにクイックフィルターパネルとウォーターフォールレイアウトを追加し、閲覧体験を向上させます。"
   },
   "rating_label": {
     "message": "🛡️ 評価 (Rating)"
