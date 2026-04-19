@@ -116,5 +116,30 @@
   },
   "img_hd": {
     "message": "HD"
-  }
+  },
+  "site_i18n_btn": {
+    "message": "🌐 Site UI Translation"
+  },
+  "site_ui_posts": { "message": "Posts" },
+  "site_ui_tags": { "message": "Tags" },
+  "site_ui_artists": { "message": "Artists" },
+  "site_ui_characters": { "message": "Characters" },
+  "site_ui_copyrights": { "message": "Copyrights" },
+  "site_ui_comments": { "message": "Comments" },
+  "site_ui_forum": { "message": "Forum" },
+  "site_ui_wiki": { "message": "Wiki" },
+  "site_ui_help": { "message": "Help" },
+  "site_ui_more": { "message": "More" },
+  "site_ui_sidebar_tags": { "message": "Tags" },
+  "site_ui_sidebar_options": { "message": "Options" },
+  "site_ui_sidebar_history": { "message": "History" },
+  "site_ui_sidebar_statistics": { "message": "Statistics" },
+  "site_ui_uploader": { "message": "Uploader" },
+  "site_ui_date": { "message": "Date" },
+  "site_ui_size": { "message": "Size" },
+  "site_ui_source": { "message": "Source" },
+  "site_ui_rating": { "message": "Rating" },
+  "site_ui_score": { "message": "Score" },
+  "site_ui_favorites": { "message": "Favorites" },
+  "site_ui_status": { "message": "Status" }
 }

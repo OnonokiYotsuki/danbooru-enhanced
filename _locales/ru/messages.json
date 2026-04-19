@@ -116,5 +116,39 @@
   },
   "img_hd": {
     "message": "HD"
-  }
+  },
+  "site_i18n_btn": {
+    "message": "🌐 Перевод интерфейса"
+  },
+  "site_ui_posts": { "message": "Посты" },
+  "site_ui_tags": { "message": "Теги" },
+  "site_ui_artists": { "message": "Художники" },
+  "site_ui_characters": { "message": "Персонажи" },
+  "site_ui_copyrights": { "message": "Авторские права" },
+  "site_ui_comments": { "message": "Комментарии" },
+  "site_ui_forum": { "message": "Форум" },
+  "site_ui_wiki": { "message": "Вики" },
+  "site_ui_help": { "message": "Помощь" },
+  "site_ui_more": { "message": "Еще" },
+  "site_ui_sidebar_tags": { "message": "Теги" },
+  "site_ui_sidebar_options": { "message": "Опции" },
+  "site_ui_sidebar_history": { "message": "История" },
+  "site_ui_sidebar_statistics": { "message": "Статистика" },
+  "site_ui_uploader": { "message": "Загрузил" },
+  "site_ui_date": { "message": "Дата" },
+  "site_ui_size": { "message": "Размер" },
+  "site_ui_source": { "message": "Источник" },
+  "site_ui_rating": { "message": "Рейтинг" },
+  "site_ui_score": { "message": "Счет" },
+  "site_ui_favorites": { "message": "Избранное" },
+  "site_ui_status": { "message": "Статус" },
+  "site_ui_my_account": { "message": "Мой аккаунт" },
+  "site_ui_notes": { "message": "Заметки" },
+  "site_ui_pools": { "message": "Пулы" },
+  "site_ui_listing": { "message": "Список" },
+  "site_ui_upload": { "message": "Загрузить" },
+  "site_ui_hot": { "message": "Горячее" },
+  "site_ui_fav_groups": { "message": "Группы избранного" },
+  "site_ui_saved_searches": { "message": "Сохраненные поиски" },
+  "site_ui_changes": { "message": "Изменения" }
 }

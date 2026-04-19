@@ -22,7 +22,7 @@
   "content_scripts": [
     {
       "matches": ["*://danbooru.donmai.us/*"],
-      "js": ["content.js"],
+      "js": ["translator.js", "content.js"],
       "css": ["content.css"]
     }
   ]

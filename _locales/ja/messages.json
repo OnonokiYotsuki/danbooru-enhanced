@@ -116,5 +116,39 @@
   },
   "img_hd": {
     "message": "高解像度"
-  }
+  },
+  "site_i18n_btn": {
+    "message": "🌐 サイト翻訳"
+  },
+  "site_ui_posts": { "message": "投稿" },
+  "site_ui_tags": { "message": "タグ" },
+  "site_ui_artists": { "message": "絵師" },
+  "site_ui_characters": { "message": "キャラクター" },
+  "site_ui_copyrights": { "message": "版権" },
+  "site_ui_comments": { "message": "コメント" },
+  "site_ui_forum": { "message": "掲示板" },
+  "site_ui_wiki": { "message": "ウィキ" },
+  "site_ui_help": { "message": "ヘルプ" },
+  "site_ui_more": { "message": "その他" },
+  "site_ui_sidebar_tags": { "message": "タグ" },
+  "site_ui_sidebar_options": { "message": "オプション" },
+  "site_ui_sidebar_history": { "message": "履歴" },
+  "site_ui_sidebar_statistics": { "message": "統計" },
+  "site_ui_uploader": { "message": "投稿者" },
+  "site_ui_date": { "message": "日付" },
+  "site_ui_size": { "message": "サイズ" },
+  "site_ui_source": { "message": "出典" },
+  "site_ui_rating": { "message": "評価" },
+  "site_ui_score": { "message": "スコア" },
+  "site_ui_favorites": { "message": "お気に入り" },
+  "site_ui_status": { "message": "ステータス" },
+  "site_ui_my_account": { "message": "マイアカウント" },
+  "site_ui_notes": { "message": "ノート" },
+  "site_ui_pools": { "message": "プール" },
+  "site_ui_listing": { "message": "一覧" },
+  "site_ui_upload": { "message": "アップロード" },
+  "site_ui_hot": { "message": "人気" },
+  "site_ui_fav_groups": { "message": "お気に入りグループ" },
+  "site_ui_saved_searches": { "message": "保存された検索" },
+  "site_ui_changes": { "message": "変更点" }
 }

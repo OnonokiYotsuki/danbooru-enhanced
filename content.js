@@ -591,6 +591,7 @@
             unit_w: chrome.i18n.getMessage('unit_week'),
             unit_mo: chrome.i18n.getMessage('unit_month'),
             unit_y: chrome.i18n.getMessage('unit_year'),
+            site_i18n: chrome.i18n.getMessage('site_i18n_btn'),
         };
 
         const isRatingActive = (val) => (state.rating || '').split(',').includes(val);
@@ -696,6 +697,13 @@
                 </div>
             </div>
 
+            <!-- 网站汉化 -->
+            <div class="quick-filter-section">
+                <div class="quick-filter-group">
+                    <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">${i18n.site_i18n}</button>
+                </div>
+            </div>
+
             <button class="quick-filter-btn btn-reset" id="qf-reset">${i18n.reset}</button>
             <div class="qf-divider"></div>
             <div class="qf-footer">
@@ -756,6 +764,19 @@
 
             if (btn.id === 'qf-masonry-toggle') {
                 setMasonryEnabled(!isMasonryEnabled());
+                return;
+            }
+
+            if (btn.id === 'qf-site-i18n-toggle') {
+                const currentState = localStorage.getItem('danbooru-enhanced-site-i18n') === 'true';
+                const newState = !currentState;
+                localStorage.setItem('danbooru-enhanced-site-i18n', newState);
+                btn.classList.toggle('active', newState);
+                if (newState) {
+                    if (window.DanbooruTranslator) window.DanbooruTranslator.apply();
+                } else {
+                    location.reload(); // Reload to restore original English text
+                }
                 return;
             }
 
