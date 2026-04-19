@@ -1,5 +1,7 @@
 # Danbooru Enhanced
 
+![Danbooru Enhanced Preview](screenshots/preview.png)
+
 > [English](./README_EN.md) | **中文**
 
 一个增强 [Danbooru](https://danbooru.donmai.us/) 浏览体验的 Chrome 扩展，提供丰富的快捷过滤面板和瀑布流布局。

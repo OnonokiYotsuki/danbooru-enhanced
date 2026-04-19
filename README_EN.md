@@ -1,5 +1,7 @@
 # Danbooru Enhanced
 
+![Danbooru Enhanced Preview](screenshots/preview.png)
+
 > **English** | [中文](./README.md)
 
 A Chrome extension that enhances [Danbooru](https://danbooru.donmai.us/) with a comprehensive filter panel and a Pinterest-style masonry layout.
