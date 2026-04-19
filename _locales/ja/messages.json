@@ -65,6 +65,13 @@
   "time_year": {
     "message": "今年"
   },
+  "time_placeholder": {
+    "message": "1, 7, 30"
+  },
+  "unit_day": { "message": "日" },
+  "unit_week": { "message": "週" },
+  "unit_month": { "message": "月" },
+  "unit_year": { "message": "年" },
   "type_label": {
     "message": "📁 タイプ"
   },

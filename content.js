@@ -93,8 +93,30 @@
         // 读取评分/收藏输入框的最新值
         const scoreInput = document.querySelector('#qf-score-input');
         const favInput = document.querySelector('#qf-fav-input');
+        const ageInput = document.querySelector('#qf-age-input');
+        const ageUnit = document.querySelector('#qf-age-unit');
         if (scoreInput) filterState.score = scoreInput.value.trim() || null;
         if (favInput) filterState.favcount = favInput.value.trim() || null;
+        if (ageInput && ageUnit) {
+            let val = ageInput.value.trim();
+            if (val) {
+                // 处理范围格式 1..7 -> 1d..7d
+                const rangeMatch = val.match(/^(\d+)\.\.(\d+)$/);
+                if (rangeMatch) {
+                    val = `${rangeMatch[1]}${ageUnit.value}..${rangeMatch[2]}${ageUnit.value}`;
+                } else {
+                    // 如果只输入了数学并选择了单位，自动补上 <
+                    if (val.match(/^\d+$/)) {
+                        val = '<' + val;
+                    }
+                    // 如果末尾没单位且不是已经包含单位的复杂格式，补上单位
+                    if (!val.match(/(d|w|mo|y)$/i)) {
+                        val += ageUnit.value;
+                    }
+                }
+            }
+            filterState.age = val || null;
+        }
 
         // 保留搜索框中用户手写的普通标签（排除面板管理的 metatag）
         const managedKeys = Object.keys(filterState);
@@ -161,15 +183,40 @@
         // 同步范围输入框
         const scoreInput = document.querySelector('#qf-score-input');
         const favInput = document.querySelector('#qf-fav-input');
+        const ageInput = document.querySelector('#qf-age-input');
+        const ageUnit = document.querySelector('#qf-age-unit');
         if (scoreInput && document.activeElement !== scoreInput) scoreInput.value = filterState.score || '';
         if (favInput && document.activeElement !== favInput) favInput.value = filterState.favcount || '';
+        if (ageInput && ageUnit && document.activeElement !== ageInput && document.activeElement !== ageUnit) {
+            const rawAge = filterState.age || '';
+            // 尝试匹配范围格式 1d..7d
+            const rangeMatch = rawAge.match(/^(\d+)(d|w|mo|y)\.\.(\d+)\2$/i);
+            if (rangeMatch) {
+                ageInput.value = `${rangeMatch[1]}..${rangeMatch[3]}`;
+                ageUnit.value = rangeMatch[2].toLowerCase();
+            } else {
+                const match = rawAge.match(/^(.*)(d|w|mo|y)$/i);
+                if (match) {
+                    let valPart = match[1];
+                    // 如果是以 < 开头且后面跟的是纯数字，则去掉 < 以保持界面简洁
+                    if (valPart.match(/^<\d+$/)) {
+                        valPart = valPart.substring(1);
+                    }
+                    ageInput.value = valPart;
+                    ageUnit.value = match[2].toLowerCase();
+                } else {
+                    ageInput.value = rawAge;
+                    ageUnit.value = 'd';
+                }
+            }
+        }
     }
 
     function getActiveState(tags) {
         return {
             rating: (tags.match(/\brating:([gsqe,]+)\b/i) || [])[1],
             order: (tags.match(/\border:(\w+)\b/i) || [])[1],
-            age: (tags.match(/\bage:(<[^\s]+)/i) || [])[1],
+            age: (tags.match(/\bage:([^\s]+)/i) || [])[1],
             filetype: (tags.match(/\bfiletype:([^\s]+)/i) || [])[1],
             score: (tags.match(/\bscore:([^\s]+)/i) || [])[1],
             favcount: (tags.match(/\bfavcount:([^\s]+)/i) || [])[1],
@@ -538,6 +585,11 @@
             img_landscape: chrome.i18n.getMessage('img_landscape'),
             img_portrait: chrome.i18n.getMessage('img_portrait'),
             img_hd: chrome.i18n.getMessage('img_hd'),
+            time_placeholder: chrome.i18n.getMessage('time_placeholder'),
+            unit_d: chrome.i18n.getMessage('unit_day'),
+            unit_w: chrome.i18n.getMessage('unit_week'),
+            unit_mo: chrome.i18n.getMessage('unit_month'),
+            unit_y: chrome.i18n.getMessage('unit_year'),
         };
 
         const isRatingActive = (val) => (state.rating || '').split(',').includes(val);
@@ -579,12 +631,15 @@
             <!-- 时间范围 -->
             <div class="quick-filter-section">
                 <div class="quick-filter-label">${i18n.time}</div>
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn ${state.age === '<1d' ? 'active' : ''}" data-type="age" data-val="<1d">${i18n.today}</button>
-                    <button class="quick-filter-btn ${state.age === '<1w' ? 'active' : ''}" data-type="age" data-val="<1w">${i18n.week}</button>
-                    <button class="quick-filter-btn ${state.age === '<1mo' ? 'active' : ''}" data-type="age" data-val="<1mo">${i18n.month}</button>
-                    <button class="quick-filter-btn ${state.age === '<3mo' ? 'active' : ''}" data-type="age" data-val="<3mo">${i18n.quarter}</button>
-                    <button class="quick-filter-btn ${state.age === '<1y' ? 'active' : ''}" data-type="age" data-val="<1y">${i18n.year}</button>
+                <div class="quick-filter-range">
+                    <input type="text" class="quick-filter-input" id="qf-age-input"
+                           placeholder="${i18n.time_placeholder}" value="" />
+                    <select class="quick-filter-select" id="qf-age-unit">
+                        <option value="d">${i18n.unit_d}</option>
+                        <option value="w">${i18n.unit_w}</option>
+                        <option value="mo">${i18n.unit_mo}</option>
+                        <option value="y">${i18n.unit_y}</option>
+                    </select>
                 </div>
             </div>
 

@@ -16,7 +16,7 @@
 |------|------|----------|
 | **🛡️ 分级 (Rating)** | SFW · NSFW · G · S · Q · E | `rating:g,s` `rating:q,e` `rating:g` `rating:s` `rating:q` `rating:e` |
 | **📊 排序 (Sort)** | 评分 · 收藏 · 排行 · 评论 · 更新 · 随机 · 高清 · 大文件 · 最新 | `order:score` `order:favcount` `order:rank` `order:comment` `order:change` `order:random` `order:mpixels` `order:filesize` _(默认)_ |
-| **🕒 时间 (Time)** | 今日 · 本周 · 本月 · 近三月 · 今年 | `age:<1d` `age:<1w` `age:<1mo` `age:<3mo` `age:<1y` |
+| **🕒 时间 (Time)** | 数值输入 + 单位下拉 (天/周/月/年) | `7` (自动补全为 `<7d`) · `>30d` · `1d..7d` |
 | **📁 类型 (Type)** | 静图 · 动图 | `filetype:jpg,png` `filetype:gif,mp4,webm,zip` |
 | **📐 图片 (Image)** | 横屏 · 竖屏 · 高清 | `ratio:>1` `ratio:<1` `width:>1920` |
 | **📄 每页 (Limit)** | 20 · 40 · 100 · 200 | `limit:20` ~ `limit:200` |

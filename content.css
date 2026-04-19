@@ -229,6 +229,25 @@
     font-size: 0.9em;
 }
 
+.quick-filter-select {
+    flex-shrink: 0;
+    width: 60px;
+    padding: 3px 4px;
+    font-size: 0.8em;
+    border: 1px solid var(--default-border-color);
+    border-radius: 4px;
+    background-color: var(--form-button-background);
+    color: var(--form-button-text-color);
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quick-filter-select:focus {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 2px rgba(var(--link-color-rgb, 56, 132, 244), 0.15);
+}
+
 /* 每页数量按钮 */
 .btn-limit { border-bottom: 2px solid var(--azure-4); }
 

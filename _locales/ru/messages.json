@@ -65,6 +65,13 @@
   "time_year": {
     "message": "Год"
   },
+  "time_placeholder": {
+    "message": "1, 7, 30"
+  },
+  "unit_day": { "message": "Дни" },
+  "unit_week": { "message": "Нед." },
+  "unit_month": { "message": "Мес." },
+  "unit_year": { "message": "Годы" },
   "type_label": {
     "message": "📁 Тип"
   },

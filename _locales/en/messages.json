@@ -65,6 +65,13 @@
   "time_year": {
     "message": "Year"
   },
+  "time_placeholder": {
+    "message": "1, 7, 30"
+  },
+  "unit_day": { "message": "Days" },
+  "unit_week": { "message": "Weeks" },
+  "unit_month": { "message": "Months" },
+  "unit_year": { "message": "Years" },
   "type_label": {
     "message": "📁 Type"
   },

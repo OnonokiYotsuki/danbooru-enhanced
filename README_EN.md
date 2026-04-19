@@ -16,7 +16,7 @@ Injects a full-featured filter panel into the sidebar, integrating the native se
 |----------|---------|------|
 | **🛡️ Rating** | SFW · NSFW · G · S · Q · E | `rating:g,s` `rating:q,e` `rating:g` `rating:s` `rating:q` `rating:e` |
 | **📊 Sort** | Score · Favs · Rank · Comment · Change · Random · Mpixels · Filesize · Latest | `order:score` `order:favcount` `order:rank` `order:comment` `order:change` `order:random` `order:mpixels` `order:filesize` _(default)_ |
-| **🕒 Time** | Today · Week · Month · Quarter · Year | `age:<1d` `age:<1w` `age:<1mo` `age:<3mo` `age:<1y` |
+| **🕒 Time** | Input + Unit Dropdown (d/w/mo/y) | `7` (auto-completes to `<7d`) · `>30d` · `1d..7d` |
 | **📁 Type** | Static · Animated | `filetype:jpg,png` `filetype:gif,mp4,webm,zip` |
 | **📐 Image** | Landscape · Portrait · HD | `ratio:>1` `ratio:<1` `width:>1920` |
 | **📄 Limit** | 20 · 40 · 100 · 200 | `limit:20` ~ `limit:200` |
