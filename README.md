@@ -4,7 +4,14 @@
 
 > [English](./README_EN.md) | **中文**
 
-一个增强 [Danbooru](https://danbooru.donmai.us/) 浏览体验的 Chrome 扩展，提供丰富的快捷过滤面板和瀑布流布局。
+---
+
+## 🚀 快速安装
+
+1. **[点击下载最新 Release 包](https://github.com/OnonokiYotsuki/danbooru-enhanced/releases/latest)** (ZIP 文件)。
+2. 解压下载的文件到任意文件夹。
+3. 在 Chrome 中打开 `chrome://extensions/`，并开启右上角的 **「开发者模式」**。
+4. 点击 **「加载已解压的扩展程序」**，选择刚刚解压的文件夹。
 
 ---
 

@@ -4,7 +4,14 @@
 
 > **English** | [中文](./README.md)
 
-A Chrome extension that enhances [Danbooru](https://danbooru.donmai.us/) with a comprehensive filter panel and a Pinterest-style masonry layout.
+---
+
+## 🚀 Quick Install
+
+1. **[Click here to download the latest Release](https://github.com/OnonokiYotsuki/danbooru-enhanced/releases/latest)** (ZIP file).
+2. Extract the downloaded ZIP to any folder.
+3. Open `chrome://extensions/` in Chrome and enable **"Developer mode"** (top right).
+4. Click **"Load unpacked"** and select the extracted folder.
 
 ---
 

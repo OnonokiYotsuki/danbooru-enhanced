@@ -1,5 +1,5 @@
 /**
- * Danbooru Quick Filter Extension - v3
+ * Danbooru Quick Filter Extension - v1.0.0
  * 增强版：支持更多分级、多种排序、时间范围过滤和瀑布流布局。
  */
 

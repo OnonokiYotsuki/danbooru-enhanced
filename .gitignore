@@ -10,3 +10,4 @@ Thumbs.db
 
 # Project specific
 .gemini/
+/dist
