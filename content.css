@@ -279,9 +279,11 @@
     width: 100%;
 }
 
-/* 每个帖子卡片：绝对定位由 JS 控制位置 */
+/* 每个帖子卡片：绝对定位由 JS 通过 transform 控制位置（GPU 加速） */
 .post-gallery.masonry-mode .masonry-item {
     position: absolute;
+    left: 0;
+    top: 0;
     margin: 0;
     padding: 0;
     border-radius: 6px;
@@ -290,7 +292,8 @@
     border: none;
     box-sizing: border-box;
     line-height: 0;
-    transition: opacity 0.15s ease, transform 0.3s ease, left 0.3s ease, top 0.3s ease;
+    will-change: transform;
+    transition: opacity 0.15s ease, transform 0.3s ease;
 }
 
 .post-gallery.masonry-mode .masonry-item:hover {
