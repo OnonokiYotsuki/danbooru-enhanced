@@ -329,8 +329,6 @@
 .btn-dedup { border-left: 3px solid var(--indigo-4, #818cf8); }
 
 .btn-reset {
-    margin-top: 5px;
-    width: 100%;
     justify-content: center;
     background-color: transparent;
     color: var(--text-color);
@@ -473,8 +471,6 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    margin: 5px 0 10px 0;
-    width: 100%;
     background: none !important;
     border: 1px dashed var(--default-border-color) !important;
     font-size: 0.75em !important;
@@ -499,4 +495,15 @@
 
 .btn-advanced.open .qf-arrow {
     transform: rotate(180deg);
+}
+
+/* 控制按钮行 */
+.qf-control-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.qf-control-row .quick-filter-btn {
+    flex: 1;
 }

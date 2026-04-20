@@ -741,11 +741,12 @@
                 </div>
             </div>
 
-            <button class="quick-filter-btn btn-advanced ${advancedOpen ? 'open' : ''}" id="qf-advanced-toggle">
-                ${i18n.advanced} <span class="qf-arrow"></span>
-            </button>
-
-            <button class="quick-filter-btn btn-reset" id="qf-reset">${i18n.reset}</button>
+            <div class="qf-control-row">
+                <button class="quick-filter-btn btn-advanced ${advancedOpen ? 'open' : ''}" id="qf-advanced-toggle">
+                    ${i18n.advanced} <span class="qf-arrow"></span>
+                </button>
+                <button class="quick-filter-btn btn-reset" id="qf-reset">${i18n.reset}</button>
+            </div>
             <div class="qf-divider"></div>
             <div class="qf-footer">
                 <span class="qf-title">${i18n.extName}</span>
