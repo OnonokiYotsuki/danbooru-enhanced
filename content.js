@@ -660,13 +660,18 @@
                 </div>
             </div>
 
-            <!-- 评分 & 时间 & 收藏范围 -->
+            <!-- 评分 & 收藏 & 时间范围 -->
             <div class="quick-filter-section">
                 <div class="quick-filter-range-grid">
                     <div class="qf-range-item">
                         <span class="qf-range-label">${i18n.score_label}</span>
                         <input type="text" class="quick-filter-input" id="qf-score-input"
                                placeholder="${i18n.score_placeholder}" value="${state.score || ''}" />
+                    </div>
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.fav_label}</span>
+                        <input type="text" class="quick-filter-input" id="qf-fav-input"
+                               placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
                     </div>
                     <div class="qf-range-item qf-range-item-wide">
                         <span class="qf-range-label">${i18n.time}</span>
@@ -680,11 +685,6 @@
                                 <option value="y">y</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="qf-range-item">
-                        <span class="qf-range-label">${i18n.fav_label}</span>
-                        <input type="text" class="quick-filter-input" id="qf-fav-input"
-                               placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
                     </div>
                 </div>
             </div>
@@ -700,7 +700,7 @@
                                 <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
                             </div>
                         </div>
-                        <div class="qf-range-item qf-range-item-wide">
+                        <div class="qf-range-item">
                             <span class="qf-range-label">${i18n.image_label}</span>
                             <div class="quick-filter-group">
                                 <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
@@ -708,7 +708,7 @@
                                 <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
                             </div>
                         </div>
-                        <div class="qf-range-item">
+                        <div class="qf-range-item qf-range-item-wide">
                             <span class="qf-range-label">${i18n.filter}</span>
                             <div class="quick-filter-group">
                                 <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
@@ -732,7 +732,7 @@
                                 <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">翻译</button>
                             </div>
                         </div>
-                        <div class="qf-range-item">
+                        <div class="qf-range-item qf-range-item-wide">
                             <span class="qf-range-label">${i18n.limit_label}</span>
                             <input type="text" class="quick-filter-input" id="qf-limit-input"
                                    placeholder="max 200" value="${state.limit || '20'}" />
