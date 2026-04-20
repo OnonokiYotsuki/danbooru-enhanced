@@ -210,8 +210,10 @@
         const favInput = document.querySelector('#qf-fav-input');
         const ageInput = document.querySelector('#qf-age-input');
         const ageUnit = document.querySelector('#qf-age-unit');
+        const limitInput = document.querySelector('#qf-limit-input');
         if (scoreInput && document.activeElement !== scoreInput) scoreInput.value = filterState.score || '';
         if (favInput && document.activeElement !== favInput) favInput.value = filterState.favcount || '';
+        if (limitInput && document.activeElement !== limitInput) limitInput.value = filterState.limit || '20';
         if (ageInput && ageUnit && document.activeElement !== ageInput && document.activeElement !== ageUnit) {
             const rawAge = filterState.age || '';
             // 尝试匹配范围格式 1d..7d
@@ -711,23 +713,26 @@
                 </div>
             </div>
 
-            <!-- 每页数量 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.limit_label}</div>
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-limit ${state.limit === '20' ? 'active' : ''}" data-type="limit" data-val="20">20</button>
-                    <button class="quick-filter-btn btn-limit ${state.limit === '40' ? 'active' : ''}" data-type="limit" data-val="40">40</button>
-                    <button class="quick-filter-btn btn-limit ${state.limit === '100' ? 'active' : ''}" data-type="limit" data-val="100">100</button>
-                    <button class="quick-filter-btn btn-limit ${state.limit === '200' ? 'active' : ''}" data-type="limit" data-val="200">200</button>
-                </div>
-            </div>
-
             <!-- 界面设置 (UI) -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">🎨 UI</div>
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">${i18n.masonry}</button>
-                    <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">${i18n.site_i18n}</button>
+                <div class="quick-filter-range-grid">
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.masonry}</span>
+                        <div class="quick-filter-group">
+                            <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">切换</button>
+                        </div>
+                    </div>
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.site_i18n}</span>
+                        <div class="quick-filter-group">
+                            <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">翻译</button>
+                        </div>
+                    </div>
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.limit_label}</span>
+                        <input type="text" class="quick-filter-input" id="qf-limit-input"
+                               placeholder="max 200" value="${state.limit || '20'}" />
+                    </div>
                 </div>
             </div>
 
@@ -856,7 +861,7 @@
         // 监听输入框的 input 和 change 事件，实时同步状态到 filterState 并持久化
         container.addEventListener('input', (e) => {
             const id = e.target.id;
-            if (['qf-score-input', 'qf-fav-input', 'qf-age-input'].includes(id)) {
+            if (['qf-score-input', 'qf-fav-input', 'qf-age-input', 'qf-limit-input'].includes(id)) {
                 filterUpdateFromInputs();
                 saveFilterState();
             }
@@ -879,6 +884,14 @@
 
         if (scoreInput) filterState.score = scoreInput.value.trim() || null;
         if (favInput) filterState.favcount = favInput.value.trim() || null;
+
+        const limitInput = document.querySelector('#qf-limit-input');
+        if (limitInput) {
+            let val = parseInt(limitInput.value.trim(), 10) || 20;
+            if (val > 200) val = 200;
+            if (val < 1) val = 20;
+            filterState.limit = val.toString();
+        }
         
         if (ageInput && ageUnit) {
             let val = ageInput.value.trim();
