@@ -655,18 +655,13 @@
                 </div>
             </div>
 
-            <!-- 评分 & 收藏 & 时间范围 -->
+            <!-- 评分 & 时间 & 收藏范围 -->
             <div class="quick-filter-section">
                 <div class="quick-filter-range-grid">
                     <div class="qf-range-item">
                         <span class="qf-range-label">${i18n.score_label}</span>
                         <input type="text" class="quick-filter-input" id="qf-score-input"
                                placeholder="${i18n.score_placeholder}" value="${state.score || ''}" />
-                    </div>
-                    <div class="qf-range-item">
-                        <span class="qf-range-label">${i18n.fav_label}</span>
-                        <input type="text" class="quick-filter-input" id="qf-fav-input"
-                               placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
                     </div>
                     <div class="qf-range-item qf-range-item-wide">
                         <span class="qf-range-label">${i18n.time}</span>
@@ -681,6 +676,11 @@
                             </select>
                         </div>
                     </div>
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.fav_label}</span>
+                        <input type="text" class="quick-filter-input" id="qf-fav-input"
+                               placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
+                    </div>
                 </div>
             </div>
 
@@ -694,7 +694,7 @@
                             <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
                         </div>
                     </div>
-                    <div class="qf-range-item">
+                    <div class="qf-range-item qf-range-item-wide">
                         <span class="qf-range-label">${i18n.image_label}</span>
                         <div class="quick-filter-group">
                             <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
@@ -702,7 +702,7 @@
                             <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
                         </div>
                     </div>
-                    <div class="qf-range-item qf-range-item-wide">
+                    <div class="qf-range-item">
                         <span class="qf-range-label">${i18n.filter}</span>
                         <div class="quick-filter-group">
                             <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
