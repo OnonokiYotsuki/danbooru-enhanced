@@ -581,7 +581,6 @@
             rating: chrome.i18n.getMessage('rating_label'),
             sort: chrome.i18n.getMessage('sort_label'),
             time: chrome.i18n.getMessage('time_label'),
-            layout: chrome.i18n.getMessage('layout_label'),
             reset: chrome.i18n.getMessage('reset_btn'),
             masonry: chrome.i18n.getMessage('masonry_btn'),
             score: chrome.i18n.getMessage('sort_score'),
@@ -653,18 +652,32 @@
                 </div>
             </div>
 
-            <!-- 时间范围 -->
+            <!-- 评分 & 收藏 & 时间范围 -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.time}</div>
-                <div class="quick-filter-range">
-                    <input type="text" class="quick-filter-input" id="qf-age-input"
-                           placeholder="${i18n.time_placeholder}" value="" />
-                    <select class="quick-filter-select" id="qf-age-unit">
-                        <option value="d">${i18n.unit_d}</option>
-                        <option value="w">${i18n.unit_w}</option>
-                        <option value="mo">${i18n.unit_mo}</option>
-                        <option value="y">${i18n.unit_y}</option>
-                    </select>
+                <div class="quick-filter-range-grid">
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.score_label}</span>
+                        <input type="text" class="quick-filter-input" id="qf-score-input"
+                               placeholder="${i18n.score_placeholder}" value="${state.score || ''}" />
+                    </div>
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.fav_label}</span>
+                        <input type="text" class="quick-filter-input" id="qf-fav-input"
+                               placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
+                    </div>
+                    <div class="qf-range-item qf-range-item-wide">
+                        <span class="qf-range-label">${i18n.time}</span>
+                        <div class="qf-input-combined">
+                            <input type="text" class="quick-filter-input" id="qf-age-input"
+                                   placeholder="${i18n.time_placeholder}" value="" />
+                            <select class="quick-filter-select" id="qf-age-unit">
+                                <option value="d">d</option>
+                                <option value="w">w</option>
+                                <option value="mo">m</option>
+                                <option value="y">y</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -674,20 +687,6 @@
                 <div class="quick-filter-group">
                     <button class="quick-filter-btn btn-type-static" data-composite="filetype_static">${i18n.type_static}</button>
                     <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
-                </div>
-            </div>
-
-            <!-- 评分 & 收藏范围 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-range-labels">
-                    <span class="quick-filter-range-label">${i18n.score_label}</span>
-                    <span class="quick-filter-range-label">${i18n.fav_label}</span>
-                </div>
-                <div class="quick-filter-range">
-                    <input type="text" class="quick-filter-input" id="qf-score-input"
-                           placeholder="${i18n.score_placeholder}" value="${state.score || ''}" />
-                    <input type="text" class="quick-filter-input" id="qf-fav-input"
-                           placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
                 </div>
             </div>
 

@@ -213,26 +213,54 @@
 .btn-type-static { border-left: 3px solid var(--azure-4); }
 .btn-type-animated { border-left: 3px solid var(--magenta-4); }
 
-/* 评分/收藏范围输入 */
-.quick-filter-range-labels {
+/* 评分/收藏范围输入 - 垂直项式布局 */
+.quick-filter-range-grid {
     display: flex;
-    gap: 4px;
-    margin-bottom: 2px;
+    gap: 8px;
+    align-items: flex-end;
 }
 
-.quick-filter-range-labels .quick-filter-range-label {
+.qf-range-item {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
     min-width: 0;
+}
+
+.qf-range-item-wide {
+    flex: 1.5;
+}
+
+.qf-range-label {
     font-size: 0.7em;
     font-weight: 700;
     color: var(--muted-text-color);
     white-space: nowrap;
-}
-
-.quick-filter-range {
+    overflow: hidden;
+    text-overflow: ellipsis;
     display: flex;
     align-items: center;
     gap: 4px;
+}
+
+.qf-input-combined {
+    display: flex;
+    gap: 2px;
+    min-width: 0;
+}
+
+.qf-input-combined .quick-filter-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.qf-input-combined .quick-filter-select {
+    width: 38px;
+    padding: 3px 0;
+    font-size: 0.75em;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 .quick-filter-input {
