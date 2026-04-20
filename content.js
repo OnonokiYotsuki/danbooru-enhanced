@@ -704,17 +704,11 @@
                 </div>
             </div>
 
-            <!-- 布局切换 -->
+            <!-- 界面设置 (UI) -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.layout}</div>
+                <div class="quick-filter-label">🎨 UI</div>
                 <div class="quick-filter-group">
                     <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">${i18n.masonry}</button>
-                </div>
-            </div>
-
-            <!-- 网站汉化 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-group">
                     <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">${i18n.site_i18n}</button>
                 </div>
             </div>
