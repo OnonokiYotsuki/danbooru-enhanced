@@ -684,7 +684,7 @@
                 </div>
             </div>
 
-            <!-- 类型 & 过滤 & 属性 -->
+            <!-- 类型 & 属性 & 过滤 -->
             <div class="quick-filter-section">
                 <div class="quick-filter-range-grid">
                     <div class="qf-range-item">
@@ -695,17 +695,17 @@
                         </div>
                     </div>
                     <div class="qf-range-item">
-                        <span class="qf-range-label">${i18n.filter}</span>
-                        <div class="quick-filter-group">
-                            <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
-                        </div>
-                    </div>
-                    <div class="qf-range-item qf-range-item-wide">
                         <span class="qf-range-label">${i18n.image_label}</span>
                         <div class="quick-filter-group">
                             <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
                             <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
                             <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
+                        </div>
+                    </div>
+                    <div class="qf-range-item qf-range-item-wide">
+                        <span class="qf-range-label">${i18n.filter}</span>
+                        <div class="quick-filter-group">
+                            <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
                         </div>
                     </div>
                 </div>
