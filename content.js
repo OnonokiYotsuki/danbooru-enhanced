@@ -44,7 +44,7 @@
     let filterState = {
         rating: null, order: null, age: null,
         filetype: null, score: null, favcount: null,
-        ratio: null, width: null, limit: null
+        ratio: null, width: null, limit: null, parent: null
     };
 
     /** 将 filterState 持久化到 chrome.storage.local */
@@ -248,6 +248,7 @@
             ratio: (tags.match(/\bratio:([^\s]+)/i) || [])[1],
             width: (tags.match(/\bwidth:([^\s]+)/i) || [])[1],
             limit: (tags.match(/\blimit:([^\s]+)/i) || [])[1],
+            parent: (tags.match(/\bparent:([^\s]+)/i) || [])[1],
         };
     }
 
@@ -615,6 +616,7 @@
             unit_w: chrome.i18n.getMessage('unit_week'),
             unit_mo: chrome.i18n.getMessage('unit_month'),
             unit_y: chrome.i18n.getMessage('unit_year'),
+            dedup: chrome.i18n.getMessage('dedup_btn'),
             site_i18n: chrome.i18n.getMessage('site_i18n_btn'),
         };
 
@@ -690,6 +692,7 @@
                     <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
                     <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
                     <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
+                    <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
                 </div>
             </div>
 

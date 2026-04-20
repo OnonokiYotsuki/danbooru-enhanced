@@ -117,6 +117,9 @@
   "img_hd": {
     "message": "高清"
   },
+  "dedup_btn": {
+    "message": "去重"
+  },
   "site_i18n_btn": {
     "message": "🌐 界面翻译"
   },

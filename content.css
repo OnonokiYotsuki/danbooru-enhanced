@@ -313,6 +313,7 @@
 .btn-img-landscape { border-left: 3px solid var(--azure-4); }
 .btn-img-portrait { border-left: 3px solid var(--purple-4); }
 .btn-img-hd { border-left: 3px solid var(--green-4); }
+.btn-dedup { border-left: 3px solid var(--indigo-4, #818cf8); }
 
 .btn-reset {
     margin-top: 5px;
