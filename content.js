@@ -631,7 +631,6 @@
         container.innerHTML = `
             <!-- 搜索框占位：原生 #search-box 将被 JS 移入此处 -->
             <div id="qf-search-slot"></div>
-            <div class="qf-divider"></div>
 
             <!-- 分级过滤 -->
             <div class="quick-filter-section">
