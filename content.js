@@ -188,6 +188,7 @@
 
             if (!type) {
                 if (btn.id === 'qf-reset') return;
+                if (btn.id === 'qf-advanced-toggle') return;
                 return;
             }
 
@@ -578,6 +579,7 @@
         
         const currentInput = document.querySelector(CONFIG.selectors.tagInput);
         const state = getActiveState(currentInput ? currentInput.value : '');
+        const advancedOpen = localStorage.getItem('danbooru-enhanced-advanced-open') === 'true';
 
         const i18n = {
             extName: chrome.i18n.getMessage('extName'),
@@ -620,6 +622,7 @@
             unit_y: chrome.i18n.getMessage('unit_year'),
             dedup: chrome.i18n.getMessage('dedup_btn'),
             filter: chrome.i18n.getMessage('filter_label'),
+            advanced: chrome.i18n.getMessage('advanced_settings'),
             site_i18n: chrome.i18n.getMessage('site_i18n_btn'),
         };
 
@@ -686,55 +689,61 @@
                 </div>
             </div>
 
-            <!-- 类型 & 属性 & 过滤 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-range-grid">
-                    <div class="qf-range-item">
-                        <span class="qf-range-label">${i18n.type_label}</span>
-                        <div class="quick-filter-group">
-                            <button class="quick-filter-btn btn-type-static" data-composite="filetype_static">${i18n.type_static}</button>
-                            <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
+            <div id="qf-advanced-content" class="${advancedOpen ? 'open' : ''}">
+                <!-- 类型 & 属性 & 过滤 -->
+                <div class="quick-filter-section">
+                    <div class="quick-filter-range-grid">
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.type_label}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-type-static" data-composite="filetype_static">${i18n.type_static}</button>
+                                <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
+                            </div>
+                        </div>
+                        <div class="qf-range-item qf-range-item-wide">
+                            <span class="qf-range-label">${i18n.image_label}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
+                                <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
+                                <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
+                            </div>
+                        </div>
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.filter}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="qf-range-item qf-range-item-wide">
-                        <span class="qf-range-label">${i18n.image_label}</span>
-                        <div class="quick-filter-group">
-                            <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
-                            <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
-                            <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
+                </div>
+
+                <!-- 界面设置 (UI) -->
+                <div class="quick-filter-section">
+                    <div class="quick-filter-range-grid">
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.masonry}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">切换</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="qf-range-item">
-                        <span class="qf-range-label">${i18n.filter}</span>
-                        <div class="quick-filter-group">
-                            <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.site_i18n}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">翻译</button>
+                            </div>
+                        </div>
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.limit_label}</span>
+                            <input type="text" class="quick-filter-input" id="qf-limit-input"
+                                   placeholder="max 200" value="${state.limit || '20'}" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 界面设置 (UI) -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-range-grid">
-                    <div class="qf-range-item">
-                        <span class="qf-range-label">${i18n.masonry}</span>
-                        <div class="quick-filter-group">
-                            <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">切换</button>
-                        </div>
-                    </div>
-                    <div class="qf-range-item">
-                        <span class="qf-range-label">${i18n.site_i18n}</span>
-                        <div class="quick-filter-group">
-                            <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">翻译</button>
-                        </div>
-                    </div>
-                    <div class="qf-range-item">
-                        <span class="qf-range-label">${i18n.limit_label}</span>
-                        <input type="text" class="quick-filter-input" id="qf-limit-input"
-                               placeholder="max 200" value="${state.limit || '20'}" />
-                    </div>
-                </div>
-            </div>
+            <button class="quick-filter-btn btn-advanced ${advancedOpen ? 'open' : ''}" id="qf-advanced-toggle">
+                ${i18n.advanced} <span class="qf-arrow"></span>
+            </button>
 
             <button class="quick-filter-btn btn-reset" id="qf-reset">${i18n.reset}</button>
             <div class="qf-divider"></div>
@@ -799,32 +808,40 @@
             if (!btn) return;
 
             if (btn.id === 'qf-reset') {
-                applyFilter({
+                filterState = {
                     rating: null, order: null, age: null,
                     filetype: null, score: null, favcount: null,
-                    ratio: null, width: null, limit: null
-                });
-                // applyFilter 已调用 saveFilterState
-                const ti = document.querySelector(CONFIG.selectors.tagInput);
-                if (ti) ti.value = '';
+                    ratio: null, width: null, limit: null, parent: null
+                };
+                const input = document.querySelector(CONFIG.selectors.tagInput);
+                if (input) input.value = '';
+                saveFilterState();
+                updateButtonStates();
                 return;
             }
 
             if (btn.id === 'qf-masonry-toggle') {
-                setMasonryEnabled(!isMasonryEnabled());
+                setMasonryEnabled(!masonryEnabled);
                 return;
             }
 
             if (btn.id === 'qf-site-i18n-toggle') {
-                const currentState = localStorage.getItem('danbooru-enhanced-site-i18n') === 'true';
-                const newState = !currentState;
-                localStorage.setItem('danbooru-enhanced-site-i18n', newState);
-                btn.classList.toggle('active', newState);
-                if (newState) {
-                    if (window.DanbooruTranslator) window.DanbooruTranslator.apply();
+                const enabled = localStorage.getItem('danbooru-enhanced-site-i18n') !== 'true';
+                localStorage.setItem('danbooru-enhanced-site-i18n', enabled);
+                btn.classList.toggle('active', enabled);
+                if (enabled) {
+                    location.reload(); // Reload to apply translations
                 } else {
                     location.reload(); // Reload to restore original English text
                 }
+                return;
+            }
+
+            if (btn.id === 'qf-advanced-toggle') {
+                const content = document.querySelector('#qf-advanced-content');
+                const isOpen = content.classList.toggle('open');
+                btn.classList.toggle('open', isOpen);
+                localStorage.setItem('danbooru-enhanced-advanced-open', isOpen);
                 return;
             }
 
@@ -834,10 +851,13 @@
             if (composite) {
                 const filters = COMPOSITE_FILTERS[composite];
                 if (!filters) return;
-                if (btn.classList.contains('active')) {
-                    const nullFilters = {};
-                    for (const k in filters) nullFilters[k] = null;
-                    applyFilter(nullFilters);
+                
+                // 检查是否已经处于该状态（如果是，则清除）
+                const alreadyActive = Object.entries(filters).every(([k, v]) => filterState[k] === v);
+                if (alreadyActive) {
+                    const clears = {};
+                    Object.keys(filters).forEach(k => clears[k] = null);
+                    applyFilter(clears);
                 } else {
                     applyFilter(filters);
                 }
@@ -845,11 +865,12 @@
             }
 
             const { type, val } = btn.dataset;
-            if (type) {
+            if (type && val !== undefined) {
                 if (type === 'rating') {
-                    applyFilter({ [type]: val });
+                    applyFilter({ rating: val });
                 } else {
-                    if (btn.classList.contains('active')) {
+                    // 单选逻辑
+                    if (filterState[type] === val) {
                         applyFilter({ [type]: null });
                     } else {
                         applyFilter({ [type]: val || null });

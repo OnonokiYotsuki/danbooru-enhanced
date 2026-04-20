@@ -458,3 +458,45 @@
     font-size: 0.7em;
     line-height: normal;
 }
+
+/* 高级选项折叠 */
+#qf-advanced-content {
+    display: none;
+}
+
+#qf-advanced-content.open {
+    display: block;
+}
+
+.btn-advanced {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 5px 0 10px 0;
+    width: 100%;
+    background: none !important;
+    border: 1px dashed var(--default-border-color) !important;
+    font-size: 0.75em !important;
+    color: var(--muted-text-color) !important;
+}
+
+.btn-advanced:hover {
+    border-style: solid !important;
+    color: var(--form-button-text-color) !important;
+    background-color: var(--form-button-hover-background) !important;
+}
+
+.qf-arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid currentColor;
+    transition: transform 0.2s;
+}
+
+.btn-advanced.open .qf-arrow {
+    transform: rotate(180deg);
+}
