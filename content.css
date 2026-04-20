@@ -15,6 +15,7 @@
 
 /* 隐藏原生搜索框中的标题和帮助文本（保持面板整洁） */
 #quick-filter-container #search-box h1,
+#quick-filter-container #search-box h2,
 #quick-filter-container #search-box .search-help {
     display: none !important;
 }
