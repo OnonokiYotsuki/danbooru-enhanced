@@ -45,74 +45,15 @@
     height: 20px;
 }
 
-/* 原生搜索框嵌入面板后的美化 */
-#quick-filter-container #search-box {
-    margin: 0;
-    padding: 0;
-}
-
+/* 隐藏原生搜索框中的标题和帮助文本（保持面板整洁） */
 #quick-filter-container #search-box h1,
 #quick-filter-container #search-box .search-help {
     display: none !important;
 }
 
 #quick-filter-container #search-box form {
-    display: flex;
-    gap: 4px;
-    align-items: stretch;
     margin: 0;
     padding: 0;
-}
-
-#quick-filter-container #search-box #tags {
-    flex: 1;
-    min-width: 0;
-    padding: 6px 10px !important;
-    font-size: 0.85em !important;
-    border: 1px solid var(--default-border-color) !important;
-    border-radius: 6px !important;
-    background-color: var(--form-button-background) !important;
-    color: var(--form-button-text-color) !important;
-    outline: none !important;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    font-family: var(--body-font);
-    box-sizing: border-box;
-    height: auto !important;
-    width: auto !important;
-}
-
-#quick-filter-container #search-box #tags:focus {
-    border-color: var(--link-color) !important;
-    box-shadow: 0 0 0 3px rgba(var(--link-color-rgb, 56, 132, 244), 0.12);
-}
-
-/* 隐藏原生提交按钮（用我们自己的） */
-#quick-filter-container #search-box form input[type="submit"],
-#quick-filter-container #search-box form button[type="submit"] {
-    display: none !important;
-}
-
-.qf-search-submit {
-    flex-shrink: 0;
-    padding: 6px 14px;
-    font-size: 0.85em;
-    font-weight: 700;
-    border: 1px solid var(--link-color);
-    border-radius: 6px;
-    background-color: var(--link-color);
-    color: var(--white);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-}
-
-.qf-search-submit:hover {
-    opacity: 0.88;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-}
-
-.qf-search-submit:active {
-    transform: scale(0.95);
 }
 
 /* 分隔线 */

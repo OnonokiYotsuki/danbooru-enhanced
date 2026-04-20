@@ -765,22 +765,13 @@
         if (searchBox && searchSlot) {
             searchSlot.appendChild(searchBox);
             // 在原生 form 内追加自定义搜索按钮
+            // 拦截原生表单提交，改用 executeSearch (将面板过滤状态合并到搜索)
             const form = searchBox.querySelector('form');
             if (form) {
-                const submitBtn = document.createElement('button');
-                submitBtn.type = 'button';
-                submitBtn.className = 'qf-search-submit';
-                submitBtn.id = 'qf-search';
-                submitBtn.textContent = i18n.search_btn;
-                form.appendChild(submitBtn);
-
-                // 拦截原生表单提交，改用 executeSearch
                 form.addEventListener('submit', (e) => {
                     e.preventDefault();
                     executeSearch();
                 });
-
-                submitBtn.addEventListener('click', () => executeSearch());
             }
         }
 
