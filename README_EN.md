@@ -23,7 +23,7 @@ Injects a full-featured filter panel into the sidebar, integrating the native se
 
 | Category | Options | Tags |
 |----------|---------|------|
-| **🛡️ Rating** | SFW · NSFW · G · S · Q · E | `rating:g,s` `rating:q,e` `rating:g` `rating:s` `rating:q` `rating:e` |
+| **🛡️ Rating** | G · S · Q · E | `rating:g` `rating:s` `rating:q` `rating:e` |
 | **📊 Sort** | Score · Favs · Rank · Comment · Change · Random · Mpixels · Filesize · Latest | `order:score` `order:favcount` `order:rank` `order:comment` `order:change` `order:random` `order:mpixels` `order:filesize` _(default)_ |
 | **🕒 Time** | Input + Unit Dropdown (d/w/mo/y) | `7` (auto-completes to `<7d`) · `>30d` · `1d..7d` |
 | **📁 Type** | Static · Animated | `filetype:jpg,png` `filetype:gif,mp4,webm,zip` |
@@ -32,7 +32,6 @@ Injects a full-featured filter panel into the sidebar, integrating the native se
 
 Additional features:
 
-- **SFW / NSFW Presets**: Toggle safe / explicit content filtering with one click.
 - **Multi-Select Ratings**: Rating buttons support combination selection (e.g. G + S simultaneously).
 - **⭐ Score / ❤️ Favorites Range**: Input range expressions (e.g. `>50`, `10..100`) to precisely filter high-quality content.
 - **Integrated Search**: Built-in search button intercepts native form submission, merging panel state with user-typed tags.

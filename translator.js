@@ -89,7 +89,6 @@
         'Background Jobs': 'site_ui_background_jobs',
         'Privacy Policy': 'site_ui_privacy',
         'Terms of Service': 'site_ui_tos',
-        '2257 Statement': 'site_ui_2257',
         'DMCA': 'site_ui_dmca',
 
         // Sidebar / Meta

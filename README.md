@@ -23,7 +23,7 @@
 
 | 分类 | 选项 | 对应标签 |
 |------|------|----------|
-| **🛡️ 分级 (Rating)** | SFW · NSFW · G · S · Q · E | `rating:g,s` `rating:q,e` `rating:g` `rating:s` `rating:q` `rating:e` |
+| **🛡️ 分级 (Rating)** | G · S · Q · E | `rating:g` `rating:s` `rating:q` `rating:e` |
 | **📊 排序 (Sort)** | 评分 · 收藏 · 排行 · 评论 · 更新 · 随机 · 高清 · 大文件 · 最新 | `order:score` `order:favcount` `order:rank` `order:comment` `order:change` `order:random` `order:mpixels` `order:filesize` _(默认)_ |
 | **🕒 时间 (Time)** | 数值输入 + 单位下拉 (天/周/月/年) | `7` (自动补全为 `<7d`) · `>30d` · `1d..7d` |
 | **📁 类型 (Type)** | 静图 · 动图 | `filetype:jpg,png` `filetype:gif,mp4,webm,zip` |
@@ -32,7 +32,6 @@
 
 额外功能：
 
-- **SFW / NSFW 快捷预设**：一键切换安全/非安全内容过滤。
 - **分级多选**：Rating 按钮支持多选组合（如同时选中 G 和 S）。
 - **⭐ 评分 / ❤️ 收藏范围**：支持输入范围表达式（如 `>50`、`10..100`），精确筛选高质量内容。
 - **一键搜索**：面板内置搜索按钮，拦截原生表单提交，将面板状态与用户标签合并后统一提交。
