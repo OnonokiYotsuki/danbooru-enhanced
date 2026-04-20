@@ -250,6 +250,19 @@
     min-width: 0;
 }
 
+/* 让项内的按钮组横向分布且撑满 */
+.qf-range-item .quick-filter-group {
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.qf-range-item .quick-filter-group .quick-filter-btn {
+    flex: 1;
+    padding: 3px 2px; /* 减少内边距以防挤压 */
+    text-align: center;
+    justify-content: center;
+}
+
 .qf-input-combined .quick-filter-input {
     flex: 1;
     min-width: 0;
