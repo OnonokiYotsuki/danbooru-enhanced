@@ -617,6 +617,7 @@
             unit_mo: chrome.i18n.getMessage('unit_month'),
             unit_y: chrome.i18n.getMessage('unit_year'),
             dedup: chrome.i18n.getMessage('dedup_btn'),
+            filter: chrome.i18n.getMessage('filter_label'),
             site_i18n: chrome.i18n.getMessage('site_i18n_btn'),
         };
 
@@ -683,16 +684,30 @@
                 </div>
             </div>
 
-            <!-- 类型 & 属性 -->
+            <!-- 类型 & 过滤 & 属性 -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.type_label} & ${i18n.image_label}</div>
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-type-static" data-composite="filetype_static">${i18n.type_static}</button>
-                    <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
-                    <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
-                    <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
-                    <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
-                    <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
+                <div class="quick-filter-range-grid">
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.type_label}</span>
+                        <div class="quick-filter-group">
+                            <button class="quick-filter-btn btn-type-static" data-composite="filetype_static">${i18n.type_static}</button>
+                            <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
+                        </div>
+                    </div>
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.filter}</span>
+                        <div class="quick-filter-group">
+                            <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
+                        </div>
+                    </div>
+                    <div class="qf-range-item qf-range-item-wide">
+                        <span class="qf-range-label">${i18n.image_label}</span>
+                        <div class="quick-filter-group">
+                            <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
+                            <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
+                            <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

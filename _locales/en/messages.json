@@ -144,5 +144,6 @@
   "site_ui_rating": { "message": "Rating" },
   "site_ui_score": { "message": "Score" },
   "site_ui_favorites": { "message": "Favorites" },
+  "filter_label": { "message": "🧹 Filter" },
   "site_ui_status": { "message": "Status" }
 }

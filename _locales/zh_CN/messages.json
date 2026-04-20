@@ -144,6 +144,7 @@
   "site_ui_rating": { "message": "分级" },
   "site_ui_score": { "message": "评分" },
   "site_ui_favorites": { "message": "收藏" },
+  "filter_label": { "message": "🧹 过滤" },
   "site_ui_status": { "message": "状态" },
   "site_ui_my_account": { "message": "我的账户" },
   "site_ui_notes": { "message": "附注" },
