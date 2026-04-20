@@ -681,19 +681,12 @@
                 </div>
             </div>
 
-            <!-- 文件类型 -->
+            <!-- 类型 & 属性 -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.type_label}</div>
+                <div class="quick-filter-label">${i18n.type_label} & ${i18n.image_label}</div>
                 <div class="quick-filter-group">
                     <button class="quick-filter-btn btn-type-static" data-composite="filetype_static">${i18n.type_static}</button>
                     <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
-                </div>
-            </div>
-
-            <!-- 图片属性 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.image_label}</div>
-                <div class="quick-filter-group">
                     <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
                     <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
                     <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
