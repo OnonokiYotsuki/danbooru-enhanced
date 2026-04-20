@@ -18,7 +18,7 @@
     "message": "🖼️ 布局"
   },
   "reset_btn": {
-    "message": "🔄 重置所有过滤器"
+    "message": "🔄 重置过滤"
   },
   "masonry_btn": {
     "message": "瀑布流"
@@ -117,6 +117,9 @@
   "img_hd": {
     "message": "高清"
   },
+  "dedup_btn": {
+    "message": "去重"
+  },
   "site_i18n_btn": {
     "message": "🌐 界面翻译"
   },
@@ -141,6 +144,8 @@
   "site_ui_rating": { "message": "分级" },
   "site_ui_score": { "message": "评分" },
   "site_ui_favorites": { "message": "收藏" },
+  "filter_label": { "message": "🧹 过滤" },
+  "advanced_settings": { "message": "⚙️ 高级选项" },
   "site_ui_status": { "message": "状态" },
   "site_ui_my_account": { "message": "我的账户" },
   "site_ui_notes": { "message": "附注" },
@@ -198,5 +203,7 @@
   "site_ui_admin": { "message": "管理" },
   "site_ui_legal": { "message": "法律" },
   "site_ui_gallery": { "message": "画廊" },
-  "site_ui_rss": { "message": "RSS订阅" }
+  "site_ui_rss": { "message": "RSS订阅" },
+  "toggle_btn": { "message": "切换" },
+  "translate_btn": { "message": "翻译" }
 }

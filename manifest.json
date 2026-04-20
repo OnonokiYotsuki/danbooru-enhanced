@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "__MSG_extDescription__",
   "default_locale": "zh_CN",
   "icons": {
@@ -18,12 +18,22 @@
       "128": "_locales/icon.png"
     }
   },
-  "permissions": ["activeTab", "storage"],
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://danbooru.donmai.us/*"],
-      "js": ["translator.js", "content.js"],
-      "css": ["content.css"]
+      "matches": [
+        "*://danbooru.donmai.us/*"
+      ],
+      "js": [
+        "translator.js",
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ]
     }
   ]
 }

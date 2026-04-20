@@ -23,20 +23,27 @@ Injects a full-featured filter panel into the sidebar, integrating the native se
 
 | Category | Options | Tags |
 |----------|---------|------|
-| **🛡️ Rating** | G · S · Q · E | `rating:g` `rating:s` `rating:q` `rating:e` |
+| **🛡️ Rating** | G · S · Q · E (multi-select) | `rating:g,s` etc. |
 | **📊 Sort** | Score · Favs · Rank · Comment · Change · Random · Mpixels · Filesize · Latest | `order:score` `order:favcount` `order:rank` `order:comment` `order:change` `order:random` `order:mpixels` `order:filesize` _(default)_ |
-| **🕒 Time** | Input + Unit Dropdown (d/w/mo/y) | `7` (auto-completes to `<7d`) · `>30d` · `1d..7d` |
+| **⭐ Score / ❤️ Favorites** | Range input (e.g. `>50`, `10..100`) | `score:>50` `favcount:10..100` |
+| **🕒 Time** | Input + Unit Dropdown (d/w/mo/y) | `age:<7d` · `age:>30d` · `age:1d..7d` |
+
+Advanced settings (collapsible panel):
+
+| Category | Options | Tags |
+|----------|---------|------|
+| **🔍 Filter** | Dedup | `parent:none` |
 | **📁 Type** | Static · Animated | `filetype:jpg,png` `filetype:gif,mp4,webm,zip` |
 | **📐 Image** | Landscape · Portrait · HD | `ratio:>1` `ratio:<1` `width:>1920` |
-| **📄 Limit** | 20 · 40 · 100 · 200 | `limit:20` ~ `limit:200` |
+| **📄 Limit** | Free input (max 200) | `limit:20` ~ `limit:200` |
 
 Additional features:
 
 - **Multi-Select Ratings**: Rating buttons support combination selection (e.g. G + S simultaneously).
-- **⭐ Score / ❤️ Favorites Range**: Input range expressions (e.g. `>50`, `10..100`) to precisely filter high-quality content.
 - **Integrated Search**: Built-in search button intercepts native form submission, merging panel state with user-typed tags.
 - **🔄 Reset All**: Clear all filters and tags with one click.
-- **State Sync**: On page load, existing meta-tags in the search box are automatically parsed and reflected in panel button states.
+- **State Persistence**: Filter state is persisted via `chrome.storage.local`, surviving across sessions.
+- **State Sync**: On page load, existing meta-tags in the URL / search box are automatically parsed and reflected in panel button states.
 
 ### Masonry Layout
 
@@ -47,6 +54,15 @@ Replaces Danbooru's default fixed-height grid with a compact masonry layout:
 - **Progressive Loading**: Displays thumbnails first and seamlessly replaces them once the sample image finishes loading.
 - **Persistence**: Layout preference is saved in `localStorage` and applied automatically on your next visit.
 - **Performance Optimized**: Uses read-write separation to avoid forced reflows, batches DOM writes via `requestAnimationFrame`, GPU-accelerated positioning with `transform`, and debounced layout updates.
+
+### Site UI Translation
+
+Translates native Danbooru English UI elements into the user's language (Chinese / Japanese / Russian):
+
+- **Coverage**: Top navigation bar, sidebar headings, post info labels, Site Map, and more.
+- **Smart Preservation**: Search tags remain untranslated to ensure search functionality works correctly.
+- **One-Click Toggle**: A translation switch is provided in the panel; toggling it automatically refreshes the page.
+- **Auto-Hidden for English**: The translation button is hidden when the browser language is English.
 
 ### Theme Support
 
@@ -75,9 +91,15 @@ Fully compatible with Danbooru's light and dark themes. Uses native CSS variable
 
 The filter panel is automatically injected at the top of the sidebar, with the native search box integrated inside. After selecting filter conditions, click the **"Search"** button in the panel (or press Enter) to execute. The panel automatically merges your manually typed tags with the selected meta-tags.
 
+Click **"Advanced Settings"** to expand additional filtering options (Dedup, file type, image attributes, per-page limit, masonry layout, UI translation).
+
 ### Masonry Layout
 
-Click the "Masonry" button at the bottom of the sidebar panel to enable it. The page will automatically refresh to restore the default layout when disabled.
+Click the toggle button next to "Masonry" in the advanced settings panel to enable it. The page will automatically refresh to restore the default layout when disabled.
+
+### Site Translation
+
+Click the button next to "UI Translation" in the advanced settings panel to enable it. After enabling, the page refreshes and native Danbooru UI elements are translated into the current browser language.
 
 ---
 
@@ -93,7 +115,9 @@ danbooru-enhanced/
 │   └── icon.png        # Extension icon
 ├── manifest.json       # Chrome Extension Manifest V3
 ├── content.js          # Core logic: Filter panel + Masonry engine
+├── translator.js       # Site UI translation engine
 ├── content.css         # Styles: Panel UI + Masonry layout
+├── package.bat         # Release packaging script
 ├── PRIVACY.md          # Privacy Policy
 ├── README.md           # 中文文档
 ├── README_EN.md        # English Documentation
@@ -108,13 +132,14 @@ danbooru-enhanced/
 | Item | Description |
 |------|-------------|
 | **Manifest** | V3 |
-| **Permissions** | `activeTab` only |
+| **Permissions** | `activeTab` + `storage` |
 | **Dependencies** | None (Pure JS/CSS) |
 | **Masonry** | JS absolute positioning + `transform` GPU acceleration + `requestAnimationFrame` batch rendering |
 | **API** | Danbooru JSON API (`/posts.json?tags=id:1,2,3`), concurrent batch requests |
 | **i18n** | Chrome `_locales` (EN / ZH / JA / RU) |
-| **State Management** | Internal filterState, merged into search box only on submission |
+| **State Management** | `chrome.storage.local` for filter state persistence, merged into search box only on submission |
 | **DOM Monitoring** | Debounced MutationObserver for auto UI injection and masonry recovery |
+| **Site Translation** | `translator.js` walks text nodes of nav/headings/post-info, replaces via mapping table |
 
 ---
 

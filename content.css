@@ -13,115 +13,18 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.qf-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 2px 0 2px;
-    margin-top: 4px;
-}
-
-.qf-title {
-    font-size: 1.1em;
-    font-weight: 800;
-    color: var(--text-color);
-    letter-spacing: 0.5px;
-}
-
-.qf-github-link {
-    color: var(--muted-text-color);
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-}
-
-.qf-github-link:hover {
-    color: var(--link-color);
-    transform: scale(1.1);
-}
-
-.qf-github-icon {
-    width: 20px;
-    height: 20px;
-}
-
-/* 原生搜索框嵌入面板后的美化 */
-#quick-filter-container #search-box {
-    margin: 0;
-    padding: 0;
-}
-
+/* 隐藏原生搜索框中的标题和帮助文本（保持面板整洁） */
 #quick-filter-container #search-box h1,
+#quick-filter-container #search-box h2,
 #quick-filter-container #search-box .search-help {
     display: none !important;
 }
 
 #quick-filter-container #search-box form {
-    display: flex;
-    gap: 4px;
-    align-items: stretch;
     margin: 0;
     padding: 0;
 }
 
-#quick-filter-container #search-box #tags {
-    flex: 1;
-    min-width: 0;
-    padding: 6px 10px !important;
-    font-size: 0.85em !important;
-    border: 1px solid var(--default-border-color) !important;
-    border-radius: 6px !important;
-    background-color: var(--form-button-background) !important;
-    color: var(--form-button-text-color) !important;
-    outline: none !important;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    font-family: var(--body-font);
-    box-sizing: border-box;
-    height: auto !important;
-    width: auto !important;
-}
-
-#quick-filter-container #search-box #tags:focus {
-    border-color: var(--link-color) !important;
-    box-shadow: 0 0 0 3px rgba(var(--link-color-rgb, 56, 132, 244), 0.12);
-}
-
-/* 隐藏原生提交按钮（用我们自己的） */
-#quick-filter-container #search-box form input[type="submit"],
-#quick-filter-container #search-box form button[type="submit"] {
-    display: none !important;
-}
-
-.qf-search-submit {
-    flex-shrink: 0;
-    padding: 6px 14px;
-    font-size: 0.85em;
-    font-weight: 700;
-    border: 1px solid var(--link-color);
-    border-radius: 6px;
-    background-color: var(--link-color);
-    color: var(--white);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-}
-
-.qf-search-submit:hover {
-    opacity: 0.88;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-}
-
-.qf-search-submit:active {
-    transform: scale(0.95);
-}
-
-/* 分隔线 */
-.qf-divider {
-    height: 1px;
-    background: var(--default-border-color);
-    margin: 2px 0;
-    opacity: 0.5;
-}
 
 .quick-filter-section {
     display: flex;
@@ -213,26 +116,67 @@
 .btn-type-static { border-left: 3px solid var(--azure-4); }
 .btn-type-animated { border-left: 3px solid var(--magenta-4); }
 
-/* 评分/收藏范围输入 */
-.quick-filter-range-labels {
+/* 评分/收藏范围输入 - 垂直项式布局 */
+.quick-filter-range-grid {
     display: flex;
-    gap: 4px;
-    margin-bottom: 2px;
+    gap: 8px;
+    align-items: flex-end;
 }
 
-.quick-filter-range-labels .quick-filter-range-label {
+.qf-range-item {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
     min-width: 0;
+}
+
+.qf-range-item-wide {
+    flex: 1.5;
+}
+
+.qf-range-label {
     font-size: 0.7em;
     font-weight: 700;
     color: var(--muted-text-color);
     white-space: nowrap;
-}
-
-.quick-filter-range {
+    overflow: hidden;
+    text-overflow: ellipsis;
     display: flex;
     align-items: center;
     gap: 4px;
+}
+
+.qf-input-combined {
+    display: flex;
+    gap: 2px;
+    min-width: 0;
+}
+
+/* 让项内的按钮组横向分布且撑满 */
+.qf-range-item .quick-filter-group {
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.qf-range-item .quick-filter-group .quick-filter-btn {
+    flex: 1;
+    padding: 3px 2px; /* 减少内边距以防挤压 */
+    text-align: center;
+    justify-content: center;
+}
+
+.qf-input-combined .quick-filter-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.qf-input-combined .quick-filter-select {
+    width: 38px;
+    padding: 3px 0;
+    font-size: 0.75em;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 .quick-filter-input {
@@ -285,10 +229,9 @@
 .btn-img-landscape { border-left: 3px solid var(--azure-4); }
 .btn-img-portrait { border-left: 3px solid var(--purple-4); }
 .btn-img-hd { border-left: 3px solid var(--green-4); }
+.btn-dedup { border-left: 3px solid var(--indigo-4, #818cf8); }
 
 .btn-reset {
-    margin-top: 5px;
-    width: 100%;
     justify-content: center;
     background-color: transparent;
     color: var(--text-color);
@@ -415,4 +358,55 @@
     padding: 2px 6px;
     font-size: 0.7em;
     line-height: normal;
+}
+
+/* 高级选项折叠 */
+#qf-advanced-content {
+    display: none;
+}
+
+#qf-advanced-content.open {
+    display: block;
+}
+
+.btn-advanced {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: none !important;
+    border: 1px dashed var(--default-border-color) !important;
+    font-size: 0.75em !important;
+    color: var(--muted-text-color) !important;
+}
+
+.btn-advanced:hover {
+    border-style: solid !important;
+    color: var(--form-button-text-color) !important;
+    background-color: var(--form-button-hover-background) !important;
+}
+
+.qf-arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid currentColor;
+    transition: transform 0.2s;
+}
+
+.btn-advanced.open .qf-arrow {
+    transform: rotate(180deg);
+}
+
+/* 控制按钮行 */
+.qf-control-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.qf-control-row .quick-filter-btn {
+    flex: 1;
 }

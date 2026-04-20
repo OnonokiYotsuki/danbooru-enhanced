@@ -44,7 +44,7 @@
     let filterState = {
         rating: null, order: null, age: null,
         filetype: null, score: null, favcount: null,
-        ratio: null, width: null, limit: null
+        ratio: null, width: null, limit: null, parent: null
     };
 
     /** 将 filterState 持久化到 chrome.storage.local */
@@ -188,6 +188,7 @@
 
             if (!type) {
                 if (btn.id === 'qf-reset') return;
+                if (btn.id === 'qf-advanced-toggle') return;
                 return;
             }
 
@@ -210,8 +211,10 @@
         const favInput = document.querySelector('#qf-fav-input');
         const ageInput = document.querySelector('#qf-age-input');
         const ageUnit = document.querySelector('#qf-age-unit');
+        const limitInput = document.querySelector('#qf-limit-input');
         if (scoreInput && document.activeElement !== scoreInput) scoreInput.value = filterState.score || '';
         if (favInput && document.activeElement !== favInput) favInput.value = filterState.favcount || '';
+        if (limitInput && document.activeElement !== limitInput) limitInput.value = filterState.limit || '20';
         if (ageInput && ageUnit && document.activeElement !== ageInput && document.activeElement !== ageUnit) {
             const rawAge = filterState.age || '';
             // 尝试匹配范围格式 1d..7d
@@ -248,6 +251,7 @@
             ratio: (tags.match(/\bratio:([^\s]+)/i) || [])[1],
             width: (tags.match(/\bwidth:([^\s]+)/i) || [])[1],
             limit: (tags.match(/\blimit:([^\s]+)/i) || [])[1],
+            parent: (tags.match(/\bparent:([^\s]+)/i) || [])[1],
         };
     }
 
@@ -575,13 +579,13 @@
         
         const currentInput = document.querySelector(CONFIG.selectors.tagInput);
         const state = getActiveState(currentInput ? currentInput.value : '');
+        const advancedOpen = localStorage.getItem('danbooru-enhanced-advanced-open') === 'true';
 
         const i18n = {
             extName: chrome.i18n.getMessage('extName'),
             rating: chrome.i18n.getMessage('rating_label'),
             sort: chrome.i18n.getMessage('sort_label'),
             time: chrome.i18n.getMessage('time_label'),
-            layout: chrome.i18n.getMessage('layout_label'),
             reset: chrome.i18n.getMessage('reset_btn'),
             masonry: chrome.i18n.getMessage('masonry_btn'),
             score: chrome.i18n.getMessage('sort_score'),
@@ -616,15 +620,20 @@
             unit_w: chrome.i18n.getMessage('unit_week'),
             unit_mo: chrome.i18n.getMessage('unit_month'),
             unit_y: chrome.i18n.getMessage('unit_year'),
+            dedup: chrome.i18n.getMessage('dedup_btn'),
+            filter: chrome.i18n.getMessage('filter_label'),
+            advanced: chrome.i18n.getMessage('advanced_settings'),
             site_i18n: chrome.i18n.getMessage('site_i18n_btn'),
+            toggle: chrome.i18n.getMessage('toggle_btn'),
+            translate: chrome.i18n.getMessage('translate_btn'),
         };
 
+        const isEnglish = (chrome.i18n.getUILanguage() || 'en').startsWith('en');
         const isRatingActive = (val) => (state.rating || '').split(',').includes(val);
 
         container.innerHTML = `
             <!-- 搜索框占位：原生 #search-box 将被 JS 移入此处 -->
             <div id="qf-search-slot"></div>
-            <div class="qf-divider"></div>
 
             <!-- 分级过滤 -->
             <div class="quick-filter-section">
@@ -653,87 +662,94 @@
                 </div>
             </div>
 
-            <!-- 时间范围 -->
+            <!-- 评分 & 收藏 & 时间范围 -->
             <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.time}</div>
-                <div class="quick-filter-range">
-                    <input type="text" class="quick-filter-input" id="qf-age-input"
-                           placeholder="${i18n.time_placeholder}" value="" />
-                    <select class="quick-filter-select" id="qf-age-unit">
-                        <option value="d">${i18n.unit_d}</option>
-                        <option value="w">${i18n.unit_w}</option>
-                        <option value="mo">${i18n.unit_mo}</option>
-                        <option value="y">${i18n.unit_y}</option>
-                    </select>
+                <div class="quick-filter-range-grid">
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.score_label}</span>
+                        <input type="text" class="quick-filter-input" id="qf-score-input"
+                               placeholder="${i18n.score_placeholder}" value="${state.score || ''}" />
+                    </div>
+                    <div class="qf-range-item">
+                        <span class="qf-range-label">${i18n.fav_label}</span>
+                        <input type="text" class="quick-filter-input" id="qf-fav-input"
+                               placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
+                    </div>
+                    <div class="qf-range-item qf-range-item-wide">
+                        <span class="qf-range-label">${i18n.time}</span>
+                        <div class="qf-input-combined">
+                            <input type="text" class="quick-filter-input" id="qf-age-input"
+                                   placeholder="${i18n.time_placeholder}" value="" />
+                            <select class="quick-filter-select" id="qf-age-unit">
+                                <option value="d">d</option>
+                                <option value="w">w</option>
+                                <option value="mo">m</option>
+                                <option value="y">y</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 文件类型 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.type_label}</div>
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-type-static" data-composite="filetype_static">${i18n.type_static}</button>
-                    <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
+            <div id="qf-advanced-content" class="${advancedOpen ? 'open' : ''}">
+                <!-- 过滤 & 类型 & 属性 -->
+                <div class="quick-filter-section">
+                    <div class="quick-filter-range-grid">
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.filter}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-dedup ${state.parent === 'none' ? 'active' : ''}" data-type="parent" data-val="none">${i18n.dedup}</button>
+                            </div>
+                        </div>
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.type_label}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-type-static" data-composite="filetype_static">${i18n.type_static}</button>
+                                <button class="quick-filter-btn btn-type-animated" data-composite="filetype_animated">${i18n.type_animated}</button>
+                            </div>
+                        </div>
+                        <div class="qf-range-item qf-range-item-wide">
+                            <span class="qf-range-label">${i18n.image_label}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
+                                <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
+                                <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 界面设置 (UI) -->
+                <div class="quick-filter-section">
+                    <div class="quick-filter-range-grid">
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.masonry}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">${i18n.toggle}</button>
+                            </div>
+                        </div>
+                        ${isEnglish ? '' : `
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.site_i18n}</span>
+                            <div class="quick-filter-group">
+                                <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">${i18n.translate}</button>
+                            </div>
+                        </div>
+                        `}
+                        <div class="qf-range-item qf-range-item-wide">
+                            <span class="qf-range-label">${i18n.limit_label}</span>
+                            <input type="text" class="quick-filter-input" id="qf-limit-input"
+                                   placeholder="max 200" value="${state.limit || '20'}" />
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 评分 & 收藏范围 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-range-labels">
-                    <span class="quick-filter-range-label">${i18n.score_label}</span>
-                    <span class="quick-filter-range-label">${i18n.fav_label}</span>
-                </div>
-                <div class="quick-filter-range">
-                    <input type="text" class="quick-filter-input" id="qf-score-input"
-                           placeholder="${i18n.score_placeholder}" value="${state.score || ''}" />
-                    <input type="text" class="quick-filter-input" id="qf-fav-input"
-                           placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
-                </div>
-            </div>
-
-            <!-- 图片属性 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.image_label}</div>
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-img-landscape" data-composite="ratio_landscape">${i18n.img_landscape}</button>
-                    <button class="quick-filter-btn btn-img-portrait" data-composite="ratio_portrait">${i18n.img_portrait}</button>
-                    <button class="quick-filter-btn btn-img-hd" data-composite="ratio_hd">${i18n.img_hd}</button>
-                </div>
-            </div>
-
-            <!-- 每页数量 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.limit_label}</div>
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-limit ${state.limit === '20' ? 'active' : ''}" data-type="limit" data-val="20">20</button>
-                    <button class="quick-filter-btn btn-limit ${state.limit === '40' ? 'active' : ''}" data-type="limit" data-val="40">40</button>
-                    <button class="quick-filter-btn btn-limit ${state.limit === '100' ? 'active' : ''}" data-type="limit" data-val="100">100</button>
-                    <button class="quick-filter-btn btn-limit ${state.limit === '200' ? 'active' : ''}" data-type="limit" data-val="200">200</button>
-                </div>
-            </div>
-
-            <!-- 布局切换 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-label">${i18n.layout}</div>
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">${i18n.masonry}</button>
-                </div>
-            </div>
-
-            <!-- 网站汉化 -->
-            <div class="quick-filter-section">
-                <div class="quick-filter-group">
-                    <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">${i18n.site_i18n}</button>
-                </div>
-            </div>
-
-            <button class="quick-filter-btn btn-reset" id="qf-reset">${i18n.reset}</button>
-            <div class="qf-divider"></div>
-            <div class="qf-footer">
-                <span class="qf-title">${i18n.extName}</span>
-                <a href="https://github.com/OnonokiYotsuki/danbooru-enhanced" target="_blank" class="qf-github-link" title="GitHub Repository">
-                    <svg height="20" viewBox="0 0 16 16" width="20" class="qf-github-icon" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" fill="currentColor"></path></svg>
-                </a>
+            <div class="qf-control-row">
+                <button class="quick-filter-btn btn-advanced ${advancedOpen ? 'open' : ''}" id="qf-advanced-toggle">
+                    ${i18n.advanced} <span class="qf-arrow"></span>
+                </button>
+                <button class="quick-filter-btn btn-reset" id="qf-reset">${i18n.reset}</button>
             </div>
         `;
 
@@ -746,22 +762,13 @@
         if (searchBox && searchSlot) {
             searchSlot.appendChild(searchBox);
             // 在原生 form 内追加自定义搜索按钮
+            // 拦截原生表单提交，改用 executeSearch (将面板过滤状态合并到搜索)
             const form = searchBox.querySelector('form');
             if (form) {
-                const submitBtn = document.createElement('button');
-                submitBtn.type = 'button';
-                submitBtn.className = 'qf-search-submit';
-                submitBtn.id = 'qf-search';
-                submitBtn.textContent = i18n.search_btn;
-                form.appendChild(submitBtn);
-
-                // 拦截原生表单提交，改用 executeSearch
                 form.addEventListener('submit', (e) => {
                     e.preventDefault();
                     executeSearch();
                 });
-
-                submitBtn.addEventListener('click', () => executeSearch());
             }
         }
 
@@ -790,32 +797,40 @@
             if (!btn) return;
 
             if (btn.id === 'qf-reset') {
-                applyFilter({
+                filterState = {
                     rating: null, order: null, age: null,
                     filetype: null, score: null, favcount: null,
-                    ratio: null, width: null, limit: null
-                });
-                // applyFilter 已调用 saveFilterState
-                const ti = document.querySelector(CONFIG.selectors.tagInput);
-                if (ti) ti.value = '';
+                    ratio: null, width: null, limit: null, parent: null
+                };
+                const input = document.querySelector(CONFIG.selectors.tagInput);
+                if (input) input.value = '';
+                saveFilterState();
+                updateButtonStates();
                 return;
             }
 
             if (btn.id === 'qf-masonry-toggle') {
-                setMasonryEnabled(!isMasonryEnabled());
+                setMasonryEnabled(!masonryEnabled);
                 return;
             }
 
             if (btn.id === 'qf-site-i18n-toggle') {
-                const currentState = localStorage.getItem('danbooru-enhanced-site-i18n') === 'true';
-                const newState = !currentState;
-                localStorage.setItem('danbooru-enhanced-site-i18n', newState);
-                btn.classList.toggle('active', newState);
-                if (newState) {
-                    if (window.DanbooruTranslator) window.DanbooruTranslator.apply();
+                const enabled = localStorage.getItem('danbooru-enhanced-site-i18n') !== 'true';
+                localStorage.setItem('danbooru-enhanced-site-i18n', enabled);
+                btn.classList.toggle('active', enabled);
+                if (enabled) {
+                    location.reload(); // Reload to apply translations
                 } else {
                     location.reload(); // Reload to restore original English text
                 }
+                return;
+            }
+
+            if (btn.id === 'qf-advanced-toggle') {
+                const content = document.querySelector('#qf-advanced-content');
+                const isOpen = content.classList.toggle('open');
+                btn.classList.toggle('open', isOpen);
+                localStorage.setItem('danbooru-enhanced-advanced-open', isOpen);
                 return;
             }
 
@@ -825,10 +840,13 @@
             if (composite) {
                 const filters = COMPOSITE_FILTERS[composite];
                 if (!filters) return;
-                if (btn.classList.contains('active')) {
-                    const nullFilters = {};
-                    for (const k in filters) nullFilters[k] = null;
-                    applyFilter(nullFilters);
+                
+                // 检查是否已经处于该状态（如果是，则清除）
+                const alreadyActive = Object.entries(filters).every(([k, v]) => filterState[k] === v);
+                if (alreadyActive) {
+                    const clears = {};
+                    Object.keys(filters).forEach(k => clears[k] = null);
+                    applyFilter(clears);
                 } else {
                     applyFilter(filters);
                 }
@@ -836,11 +854,12 @@
             }
 
             const { type, val } = btn.dataset;
-            if (type) {
+            if (type && val !== undefined) {
                 if (type === 'rating') {
-                    applyFilter({ [type]: val });
+                    applyFilter({ rating: val });
                 } else {
-                    if (btn.classList.contains('active')) {
+                    // 单选逻辑
+                    if (filterState[type] === val) {
                         applyFilter({ [type]: null });
                     } else {
                         applyFilter({ [type]: val || null });
@@ -852,7 +871,7 @@
         // 监听输入框的 input 和 change 事件，实时同步状态到 filterState 并持久化
         container.addEventListener('input', (e) => {
             const id = e.target.id;
-            if (['qf-score-input', 'qf-fav-input', 'qf-age-input'].includes(id)) {
+            if (['qf-score-input', 'qf-fav-input', 'qf-age-input', 'qf-limit-input'].includes(id)) {
                 filterUpdateFromInputs();
                 saveFilterState();
             }
@@ -875,6 +894,14 @@
 
         if (scoreInput) filterState.score = scoreInput.value.trim() || null;
         if (favInput) filterState.favcount = favInput.value.trim() || null;
+
+        const limitInput = document.querySelector('#qf-limit-input');
+        if (limitInput) {
+            let val = parseInt(limitInput.value.trim(), 10) || 20;
+            if (val > 200) val = 200;
+            if (val < 1) val = 20;
+            filterState.limit = val.toString();
+        }
         
         if (ageInput && ageUnit) {
             let val = ageInput.value.trim();
