@@ -6,19 +6,19 @@
     "message": "Danbooruにクイックフィルターパネルとウォーターフォールレイアウトを追加し、閲覧体験を向上させます。"
   },
   "rating_label": {
-    "message": "🛡️ 評価 (Rating)"
+    "message": "🛡️ 評価"
   },
   "sort_label": {
-    "message": "📊 並び替え (Sort)"
+    "message": "📊 並び替え"
   },
   "time_label": {
-    "message": "🕒 期間 (Time)"
+    "message": "🕒 期間"
   },
   "layout_label": {
-    "message": "🖼️ レイアウト (Layout)"
+    "message": "🖼️ レイアウト"
   },
   "reset_btn": {
-    "message": "🔄 すべてのリセット"
+    "message": "🔄 リセット"
   },
   "masonry_btn": {
     "message": "タイル状"
@@ -48,7 +48,7 @@
     "message": "高解像度"
   },
   "sort_filesize": {
-    "message": "ファイルサイズ"
+    "message": "サイズ"
   },
   "time_today": {
     "message": "今日"
@@ -68,10 +68,10 @@
   "time_placeholder": {
     "message": "1, 7, 30"
   },
-  "unit_day": { "message": "日" },
-  "unit_week": { "message": "週" },
-  "unit_month": { "message": "月" },
-  "unit_year": { "message": "年" },
+  "unit_day": { "message": "d" },
+  "unit_week": { "message": "w" },
+  "unit_month": { "message": "m" },
+  "unit_year": { "message": "y" },
   "type_label": {
     "message": "📁 タイプ"
   },
@@ -100,7 +100,7 @@
     "message": "検索"
   },
   "tag_placeholder": {
-    "message": "タグを検索..."
+    "message": "タグ検索..."
   },
   "limit_label": {
     "message": "📄 表示数"
@@ -115,7 +115,10 @@
     "message": "縦向き"
   },
   "img_hd": {
-    "message": "高解像度"
+    "message": "HD"
+  },
+  "dedup_btn": {
+    "message": "重複"
   },
   "site_i18n_btn": {
     "message": "🌐 サイト翻訳"
@@ -123,7 +126,7 @@
   "site_ui_posts": { "message": "投稿" },
   "site_ui_tags": { "message": "タグ" },
   "site_ui_artists": { "message": "絵師" },
-  "site_ui_characters": { "message": "キャラクター" },
+  "site_ui_characters": { "message": "角色" },
   "site_ui_copyrights": { "message": "版権" },
   "site_ui_comments": { "message": "コメント" },
   "site_ui_forum": { "message": "掲示板" },
@@ -141,6 +144,8 @@
   "site_ui_rating": { "message": "評価" },
   "site_ui_score": { "message": "スコア" },
   "site_ui_favorites": { "message": "お気に入り" },
+  "filter_label": { "message": "🧹 フィルタ" },
+  "advanced_settings": { "message": "⚙️ 高性能設定" },
   "site_ui_status": { "message": "ステータス" },
   "site_ui_my_account": { "message": "マイアカウント" },
   "site_ui_notes": { "message": "ノート" },
@@ -150,5 +155,55 @@
   "site_ui_hot": { "message": "人気" },
   "site_ui_fav_groups": { "message": "お気に入りグループ" },
   "site_ui_saved_searches": { "message": "保存された検索" },
-  "site_ui_changes": { "message": "変更点" }
+  "site_ui_changes": { "message": "変更点" },
+  "site_ui_popular": { "message": "人気" },
+  "site_ui_votes": { "message": "投票" },
+  "site_ui_most_viewed": { "message": "最も閲覧" },
+  "site_ui_similar_search": { "message": "類似検索" },
+  "site_ui_tag_history": { "message": "タグ履歴" },
+  "site_ui_events": { "message": "イベント" },
+  "site_ui_appeals": { "message": "申告" },
+  "site_ui_approvals": { "message": "承認" },
+  "site_ui_disapprovals": { "message": "拒否" },
+  "site_ui_flags": { "message": "フラグ" },
+  "site_ui_replacements": { "message": "置換" },
+  "site_ui_aliases": { "message": "エイリアス" },
+  "site_ui_implications": { "message": "包含" },
+  "site_ui_ai_tags": { "message": "AIタグ" },
+  "site_ui_related_tags": { "message": "関連タグ" },
+  "site_ui_cheat_sheet": { "message": "早見表" },
+  "site_ui_user_reports": { "message": "ユーザー報告" },
+  "site_ui_top_searches": { "message": "人気検索" },
+  "site_ui_missed_searches": { "message": "見逃した検索" },
+  "site_ui_bulk_update": { "message": "一括更新リクエスト" },
+  "site_ui_mod_actions": { "message": "モデレーター操作" },
+  "site_ui_mod_reports": { "message": "モデレーター報告" },
+  "site_ui_settings": { "message": "設定" },
+  "site_ui_uploads": { "message": "アップロード一覧" },
+  "site_ui_dmails": { "message": "Dメール" },
+  "site_ui_upgrade": { "message": "アカウントのアップグレード" },
+  "site_ui_bans": { "message": "BAN" },
+  "site_ui_name_changes": { "message": "名前変更履歴" },
+  "site_ui_feedback": { "message": "フィードバック" },
+  "site_ui_site_status": { "message": "サイトステータス" },
+  "site_ui_site_statistics": { "message": "サイト統計" },
+  "site_ui_user_scripts": { "message": "ユーザースクリプト" },
+  "site_ui_keyboard": { "message": "キーボード" },
+  "site_ui_api": { "message": "API" },
+  "site_ui_background_jobs": { "message": "バックグラウンドジョブ" },
+  "site_ui_privacy": { "message": "プライバシーポリシー" },
+  "site_ui_tos": { "message": "利用規約" },
+  "site_ui_dmca": { "message": "DMCA" },
+  "site_ui_post_events": { "message": "投稿イベント" },
+  "site_ui_artist_commentary": { "message": "絵師のコメント" },
+  "site_ui_reports": { "message": "報告" },
+  "site_ui_site_section": { "message": "サイト" },
+  "site_ui_profile": { "message": "プロフィール" },
+  "site_ui_users": { "message": "ユーザー" },
+  "site_ui_admin": { "message": "管理" },
+  "site_ui_legal": { "message": "法的" },
+  "site_ui_gallery": { "message": "ギャラリー" },
+  "site_ui_rss": { "message": "RSS" },
+  "toggle_btn": { "message": "切替" },
+  "translate_btn": { "message": "翻訳" }
 }

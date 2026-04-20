@@ -624,8 +624,11 @@
             filter: chrome.i18n.getMessage('filter_label'),
             advanced: chrome.i18n.getMessage('advanced_settings'),
             site_i18n: chrome.i18n.getMessage('site_i18n_btn'),
+            toggle: chrome.i18n.getMessage('toggle_btn'),
+            translate: chrome.i18n.getMessage('translate_btn'),
         };
 
+        const isEnglish = (chrome.i18n.getUILanguage() || 'en').startsWith('en');
         const isRatingActive = (val) => (state.rating || '').split(',').includes(val);
 
         container.innerHTML = `
@@ -722,15 +725,17 @@
                         <div class="qf-range-item">
                             <span class="qf-range-label">${i18n.masonry}</span>
                             <div class="quick-filter-group">
-                                <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">切换</button>
+                                <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">${i18n.toggle}</button>
                             </div>
                         </div>
+                        ${isEnglish ? '' : `
                         <div class="qf-range-item">
                             <span class="qf-range-label">${i18n.site_i18n}</span>
                             <div class="quick-filter-group">
-                                <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">翻译</button>
+                                <button class="quick-filter-btn btn-site-i18n ${localStorage.getItem('danbooru-enhanced-site-i18n') === 'true' ? 'active' : ''}" id="qf-site-i18n-toggle">${i18n.translate}</button>
                             </div>
                         </div>
+                        `}
                         <div class="qf-range-item qf-range-item-wide">
                             <span class="qf-range-label">${i18n.limit_label}</span>
                             <input type="text" class="quick-filter-input" id="qf-limit-input"

@@ -6,19 +6,19 @@
     "message": "Добавляет панель быстрых фильтров и каскадную раскладку для улучшения просмотра Danbooru."
   },
   "rating_label": {
-    "message": "🛡️ Рейтинг (Rating)"
+    "message": "🛡️ Рейтинг"
   },
   "sort_label": {
-    "message": "📊 Сортировка (Sort)"
+    "message": "📊 Сортировка"
   },
   "time_label": {
-    "message": "🕒 Время (Time)"
+    "message": "🕒 Время"
   },
   "layout_label": {
-    "message": "🖼️ Макет (Layout)"
+    "message": "🖼️ Макет"
   },
   "reset_btn": {
-    "message": "🔄 Сбросить все фильтры"
+    "message": "🔄 Сброс"
   },
   "masonry_btn": {
     "message": "Плиточный"
@@ -45,10 +45,10 @@
     "message": "Случайно"
   },
   "sort_mpixels": {
-    "message": "Разрешение"
+    "message": "HD"
   },
   "sort_filesize": {
-    "message": "Размер файла"
+    "message": "Размер"
   },
   "time_today": {
     "message": "Сегодня"
@@ -60,7 +60,7 @@
     "message": "Месяц"
   },
   "time_quarter": {
-    "message": "3 месяца"
+    "message": "3 мес."
   },
   "time_year": {
     "message": "Год"
@@ -68,10 +68,10 @@
   "time_placeholder": {
     "message": "1, 7, 30"
   },
-  "unit_day": { "message": "Дни" },
-  "unit_week": { "message": "Нед." },
-  "unit_month": { "message": "Мес." },
-  "unit_year": { "message": "Годы" },
+  "unit_day": { "message": "д" },
+  "unit_week": { "message": "н" },
+  "unit_month": { "message": "м" },
+  "unit_year": { "message": "г" },
   "type_label": {
     "message": "📁 Тип"
   },
@@ -79,7 +79,7 @@
     "message": "Статика"
   },
   "type_animated": {
-    "message": "Анимация"
+    "message": "Видео"
   },
   "score_label": {
     "message": "⭐ Оценка"
@@ -100,22 +100,25 @@
     "message": "Поиск"
   },
   "tag_placeholder": {
-    "message": "Поиск по тегам..."
+    "message": "Поиск тегов..."
   },
   "limit_label": {
-    "message": "📄 На странице"
+    "message": "📄 На стр."
   },
   "image_label": {
     "message": "📐 Изображение"
   },
   "img_landscape": {
-    "message": "Альбомная"
+    "message": "Альбом"
   },
   "img_portrait": {
-    "message": "Портретная"
+    "message": "Портрет"
   },
   "img_hd": {
     "message": "HD"
+  },
+  "dedup_btn": {
+    "message": "Дубли"
   },
   "site_i18n_btn": {
     "message": "🌐 Перевод интерфейса"
@@ -141,6 +144,8 @@
   "site_ui_rating": { "message": "Рейтинг" },
   "site_ui_score": { "message": "Счет" },
   "site_ui_favorites": { "message": "Избранное" },
+  "filter_label": { "message": "🧹 Фильтр" },
+  "advanced_settings": { "message": "⚙️ Продвинутые" },
   "site_ui_status": { "message": "Статус" },
   "site_ui_my_account": { "message": "Мой аккаунт" },
   "site_ui_notes": { "message": "Заметки" },
@@ -150,5 +155,55 @@
   "site_ui_hot": { "message": "Горячее" },
   "site_ui_fav_groups": { "message": "Группы избранного" },
   "site_ui_saved_searches": { "message": "Сохраненные поиски" },
-  "site_ui_changes": { "message": "Изменения" }
+  "site_ui_changes": { "message": "Изменения" },
+  "site_ui_popular": { "message": "Популярное" },
+  "site_ui_votes": { "message": "Голоса" },
+  "site_ui_most_viewed": { "message": "Больше всего просмотров" },
+  "site_ui_similar_search": { "message": "Похожие изображения" },
+  "site_ui_tag_history": { "message": "История тегов" },
+  "site_ui_events": { "message": "События" },
+  "site_ui_appeals": { "message": "Апелляции" },
+  "site_ui_approvals": { "message": "Одобрения" },
+  "site_ui_disapprovals": { "message": "Неодобрения" },
+  "site_ui_flags": { "message": "Флаги" },
+  "site_ui_replacements": { "message": "Замены" },
+  "site_ui_aliases": { "message": "Алиасы" },
+  "site_ui_implications": { "message": "Связи" },
+  "site_ui_ai_tags": { "message": "AI Теги" },
+  "site_ui_related_tags": { "message": "Похожие теги" },
+  "site_ui_cheat_sheet": { "message": "Шпаргалка" },
+  "site_ui_user_reports": { "message": "Отчеты пользователей" },
+  "site_ui_top_searches": { "message": "Топ поисков" },
+  "site_ui_missed_searches": { "message": "Пропущенные поиски" },
+  "site_ui_bulk_update": { "message": "Массовое обновление" },
+  "site_ui_mod_actions": { "message": "Действия модераторов" },
+  "site_ui_mod_reports": { "message": "Отчеты модераторов" },
+  "site_ui_settings": { "message": "Настройки" },
+  "site_ui_uploads": { "message": "Загрузки" },
+  "site_ui_dmails": { "message": "D-почта" },
+  "site_ui_upgrade": { "message": "Обновить аккаунт" },
+  "site_ui_bans": { "message": "Баны" },
+  "site_ui_name_changes": { "message": "Смены ников" },
+  "site_ui_feedback": { "message": "Обратная связь" },
+  "site_ui_site_status": { "message": "Статус сайта" },
+  "site_ui_site_statistics": { "message": "Статистика сайта" },
+  "site_ui_user_scripts": { "message": "Юзерскрипты" },
+  "site_ui_keyboard": { "message": "Клавиатура" },
+  "site_ui_api": { "message": "API" },
+  "site_ui_background_jobs": { "message": "Фоновые задачи" },
+  "site_ui_privacy": { "message": "Политика конфиденциальности" },
+  "site_ui_tos": { "message": "Условия использования" },
+  "site_ui_dmca": { "message": "DMCA" },
+  "site_ui_post_events": { "message": "События постов" },
+  "site_ui_artist_commentary": { "message": "Комментарии художников" },
+  "site_ui_reports": { "message": "Отчеты" },
+  "site_ui_site_section": { "message": "Сайт" },
+  "site_ui_profile": { "message": "Профиль" },
+  "site_ui_users": { "message": "Пользователи" },
+  "site_ui_admin": { "message": "Админ" },
+  "site_ui_legal": { "message": "Юридическое" },
+  "site_ui_gallery": { "message": "Галерея" },
+  "site_ui_rss": { "message": "RSS" },
+  "toggle_btn": { "message": "Перекл." },
+  "translate_btn": { "message": "Перевод" }
 }

@@ -18,7 +18,7 @@
     "message": "🖼️ 布局"
   },
   "reset_btn": {
-    "message": "🔄 重置所有过滤器"
+    "message": "🔄 重置过滤"
   },
   "masonry_btn": {
     "message": "瀑布流"
@@ -203,5 +203,7 @@
   "site_ui_admin": { "message": "管理" },
   "site_ui_legal": { "message": "法律" },
   "site_ui_gallery": { "message": "画廊" },
-  "site_ui_rss": { "message": "RSS订阅" }
+  "site_ui_rss": { "message": "RSS订阅" },
+  "toggle_btn": { "message": "切换" },
+  "translate_btn": { "message": "翻译" }
 }
