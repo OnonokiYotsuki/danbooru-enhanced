@@ -75,21 +75,54 @@
         }
     }
 
+    function hasUrlTagsParam() {
+        return new URLSearchParams(location.search).has('tags');
+    }
+
+    function getCurrentSearchTags() {
+        const tags = new URLSearchParams(location.search).get('tags');
+        if (tags !== null) return tags;
+
+        const input = document.querySelector(CONFIG.selectors.tagInput);
+        return input ? input.value : '';
+    }
+
     /** 从搜索框当前内容初始化面板状态 */
-    function initFilterState() {
+    function initFilterState(clearMissing) {
         const input = document.querySelector(CONFIG.selectors.tagInput);
         if (!input) return;
-        const parsed = getActiveState(input.value);
+        const currentTags = getCurrentSearchTags();
+        const parsed = getActiveState(currentTags);
         for (const key in filterState) {
-            filterState[key] = parsed[key] || null;
+            if (parsed[key] || clearMissing) {
+                filterState[key] = parsed[key] || null;
+            }
         }
         // 从搜索框中移除面板管理的 metatag，只保留用户手写的普通标签
         const managedKeys = Object.keys(filterState);
-        const plainTags = input.value.split(/\s+/).filter(t => {
+        const plainTags = currentTags.split(/\s+/).filter(t => {
             if (!t.trim()) return false;
             return !managedKeys.some(k => t.toLowerCase().startsWith(k + ':'));
         });
         input.value = plainTags.join(' ');
+    }
+
+    function normalizeAgeFilter(value, unit) {
+        let val = value.trim();
+        if (!val) return null;
+
+        const rangeMatch = val.match(/^(\d+)\.\.(\d+)$/);
+        if (rangeMatch) {
+            return `${rangeMatch[1]}${unit}..${rangeMatch[2]}${unit}`;
+        }
+
+        if (val.match(/^\d+$/)) {
+            val = '<' + val;
+        }
+        if (!val.match(/(d|w|mo|y)$/i)) {
+            val += unit;
+        }
+        return val;
     }
 
     /** 更新面板内部状态并刷新按钮 UI */
@@ -127,26 +160,7 @@
         const ageUnit = document.querySelector('#qf-age-unit');
         if (scoreInput) filterState.score = scoreInput.value.trim() || null;
         if (favInput) filterState.favcount = favInput.value.trim() || null;
-        if (ageInput && ageUnit) {
-            let val = ageInput.value.trim();
-            if (val) {
-                // 处理范围格式 1..7 -> 1d..7d
-                const rangeMatch = val.match(/^(\d+)\.\.(\d+)$/);
-                if (rangeMatch) {
-                    val = `${rangeMatch[1]}${ageUnit.value}..${rangeMatch[2]}${ageUnit.value}`;
-                } else {
-                    // 如果只输入了数学并选择了单位，自动补上 <
-                    if (val.match(/^\d+$/)) {
-                        val = '<' + val;
-                    }
-                    // 如果末尾没单位且不是已经包含单位的复杂格式，补上单位
-                    if (!val.match(/(d|w|mo|y)$/i)) {
-                        val += ageUnit.value;
-                    }
-                }
-            }
-            filterState.age = val || null;
-        }
+        if (ageInput && ageUnit) filterState.age = normalizeAgeFilter(ageInput.value, ageUnit.value);
 
         // 保留搜索框中用户手写的普通标签（排除面板管理的 metatag）
         const managedKeys = Object.keys(filterState);
@@ -166,7 +180,9 @@
 
         saveFilterState();
         const form = document.querySelector(CONFIG.selectors.searchForm);
-        if (form) form.submit();
+        if (form) {
+            HTMLFormElement.prototype.submit.call(form);
+        }
     }
 
 
@@ -174,7 +190,7 @@
         const buttons = document.querySelectorAll('.quick-filter-btn');
 
         buttons.forEach(btn => {
-            const { type, val, composite, preset } = btn.dataset;
+            const { type, val, composite } = btn.dataset;
 
 
             // 复合过滤器按钮
@@ -261,6 +277,10 @@
     let masonryResizeTimer = null;
     let masonryLayoutTimer = null;
     let masonryLayoutRafId = null;
+    let masonryApplyPromise = null;
+    let masonryApplyAgain = false;
+    const sampleUrlCache = new Map();
+    const sampleUrlInFlight = new Map();
 
     // 缓存的 DOM 引用，避免每次布局都查询
     let _masonryContainer = null;
@@ -393,29 +413,122 @@
         if (postIds.length === 0) return {};
 
         const map = {};
+        const missingIds = [];
+        const uniqueIds = [...new Set(postIds.map(id => String(id)))];
+
+        uniqueIds.forEach(id => {
+            if (sampleUrlCache.has(id)) {
+                map[id] = sampleUrlCache.get(id);
+            } else {
+                missingIds.push(id);
+            }
+        });
+
+        if (missingIds.length === 0) return map;
+
         const batchSize = 200; // Danbooru 单次最多 200
         const batches = [];
 
-        for (let i = 0; i < postIds.length; i += batchSize) {
-            const batch = postIds.slice(i, i + batchSize);
+        for (let i = 0; i < missingIds.length; i += batchSize) {
+            const batch = missingIds.slice(i, i + batchSize);
             const tagQuery = 'id:' + batch.join(',');
-            batches.push(
-                fetch(`/posts.json?tags=${encodeURIComponent(tagQuery)}&limit=${batch.length}`)
+            const cacheKey = batch.join(',');
+            if (!sampleUrlInFlight.has(cacheKey)) {
+                sampleUrlInFlight.set(cacheKey, fetch(`/posts.json?tags=${encodeURIComponent(tagQuery)}&limit=${batch.length}`)
                     .then(r => r.ok ? r.json() : [])
                     .catch(() => [])
-            );
+                    .finally(() => sampleUrlInFlight.delete(cacheKey)));
+            }
+            batches.push(sampleUrlInFlight.get(cacheKey));
         }
 
         const results = await Promise.all(batches);
         for (const posts of results) {
             for (const p of posts) {
-                map[p.id] = p.large_file_url || p.file_url || null;
+                const id = String(p.id);
+                const url = p.large_file_url || p.file_url || null;
+                sampleUrlCache.set(id, url);
+                map[id] = url;
             }
         }
         return map;
     }
 
+    function prepareMasonryArticle(article, sampleUrlMap) {
+        article.classList.add('masonry-item');
+
+        // 移除 Danbooru 的固定尺寸 class
+        const clsToRemove = [];
+        article.classList.forEach(cls => {
+            if (cls.startsWith('post-preview-') && cls !== 'post-preview') clsToRemove.push(cls);
+        });
+        clsToRemove.forEach(cls => {
+            article.dataset.masonryRemoved = (article.dataset.masonryRemoved || '') + ' ' + cls;
+            article.classList.remove(cls);
+        });
+
+        const img = article.querySelector(CONFIG.selectors.postPreviewImage);
+        if (!img) return;
+
+        // 保存原始尺寸属性以便未来无刷新恢复时使用
+        if (img.hasAttribute('width') && !img.dataset.masonryOrigWidth) {
+            img.dataset.masonryOrigWidth = img.getAttribute('width');
+            img.removeAttribute('width');
+        }
+        if (img.hasAttribute('height') && !img.dataset.masonryOrigHeight) {
+            img.dataset.masonryOrigHeight = img.getAttribute('height');
+            img.removeAttribute('height');
+        }
+
+        // 清除内联 style 中可能的固定尺寸
+        img.style.cssText = '';
+
+        // 替换为 sample 尺寸图片
+        if (!img.dataset.masonryOrigSrc) img.dataset.masonryOrigSrc = img.src;
+        const postId = article.dataset.id;
+        const sampleUrl = postId && sampleUrlMap[String(postId)];
+        if (sampleUrl && img.src !== sampleUrl) {
+            const preloader = new Image();
+            preloader.onload = function() {
+                const picture = img.closest('picture');
+                if (picture) {
+                    picture.querySelectorAll('source').forEach(s => s.remove());
+                }
+                img.addEventListener('load', scheduleLayout, { once: true });
+                img.src = sampleUrl;
+                if (img.complete) scheduleLayout();
+            };
+            preloader.src = sampleUrl;
+        }
+
+        // 清除 post-preview-container 上的内联样式
+        const previewContainer = article.querySelector('.post-preview-container');
+        if (previewContainer) {
+            previewContainer.style.cssText = '';
+        }
+    }
+
     async function applyMasonryLayout() {
+        if (masonryApplyPromise) {
+            masonryApplyAgain = true;
+            return masonryApplyPromise;
+        }
+
+        masonryApplyPromise = doApplyMasonryLayout();
+        try {
+            await masonryApplyPromise;
+        } finally {
+            masonryApplyPromise = null;
+            if (masonryApplyAgain && masonryEnabled) {
+                masonryApplyAgain = false;
+                applyMasonryLayout();
+            } else {
+                masonryApplyAgain = false;
+            }
+        }
+    }
+
+    async function doApplyMasonryLayout() {
         const gallery = document.querySelector(CONFIG.selectors.postGallery);
         const container = document.querySelector(CONFIG.selectors.postsContainer);
         if (!gallery || !container) return;
@@ -444,59 +557,7 @@
         });
         const sampleUrlMap = await fetchSampleUrls(postIds);
 
-        articles.forEach(article => {
-            article.classList.add('masonry-item');
-
-            // 移除 Danbooru 的固定尺寸 class
-            const clsToRemove = [];
-            article.classList.forEach(cls => {
-                if (cls.startsWith('post-preview-') && cls !== 'post-preview') clsToRemove.push(cls);
-            });
-            clsToRemove.forEach(cls => {
-                article.dataset.masonryRemoved = (article.dataset.masonryRemoved || '') + ' ' + cls;
-                article.classList.remove(cls);
-            });
-
-            const img = article.querySelector(CONFIG.selectors.postPreviewImage);
-            if (!img) return;
-
-            // 保存原始尺寸属性以便恢复
-            if (img.hasAttribute('width')) {
-                img.dataset.masonryOrigWidth = img.getAttribute('width');
-                img.removeAttribute('width');
-            }
-            if (img.hasAttribute('height')) {
-                img.dataset.masonryOrigHeight = img.getAttribute('height');
-                img.removeAttribute('height');
-            }
-
-            // 清除内联 style 中可能的固定尺寸
-            img.style.cssText = '';
-
-            // 替换为 sample 尺寸图片
-            img.dataset.masonryOrigSrc = img.src;
-            const postId = article.dataset.id;
-            const sampleUrl = postId && sampleUrlMap[postId];
-            if (sampleUrl) {
-                const preloader = new Image();
-                preloader.onload = function() {
-                    const picture = img.closest('picture');
-                    if (picture) {
-                        picture.querySelectorAll('source').forEach(s => s.remove());
-                    }
-                    img.src = sampleUrl;
-                    // 图片替换后尺寸变化，使用防抖布局（多张图同时加载完不会重复计算）
-                    img.addEventListener('load', scheduleLayout, { once: true });
-                };
-                preloader.src = sampleUrl;
-            }
-
-            // 清除 post-preview-container 上的内联样式
-            const previewContainer = article.querySelector('.post-preview-container');
-            if (previewContainer) {
-                previewContainer.style.cssText = '';
-            }
-        });
+        articles.forEach(article => prepareMasonryArticle(article, sampleUrlMap));
 
         // 缓存 DOM 引用后执行初始布局
         cacheMasonryRefs();
@@ -513,6 +574,21 @@
         // 监听窗口 resize，防抖重新布局
         window.removeEventListener('resize', onMasonryResize);
         window.addEventListener('resize', onMasonryResize);
+    }
+
+    function refreshMasonryLayout() {
+        const container = document.querySelector(CONFIG.selectors.postsContainer);
+        if (!container) return;
+        const articles = container.querySelectorAll(CONFIG.selectors.postPreview);
+        const needsApply = !container.classList.contains('masonry-container')
+            || articles.length !== container.querySelectorAll('.masonry-item').length;
+
+        if (needsApply) {
+            applyMasonryLayout();
+        } else {
+            cacheMasonryRefs();
+            scheduleLayout();
+        }
     }
 
     function onMasonryResize() {
@@ -582,7 +658,6 @@
         const advancedOpen = localStorage.getItem('danbooru-enhanced-advanced-open') === 'true';
 
         const i18n = {
-            extName: chrome.i18n.getMessage('extName'),
             rating: chrome.i18n.getMessage('rating_label'),
             sort: chrome.i18n.getMessage('sort_label'),
             time: chrome.i18n.getMessage('time_label'),
@@ -597,11 +672,6 @@
             random: chrome.i18n.getMessage('sort_random'),
             mpixels: chrome.i18n.getMessage('sort_mpixels'),
             filesize: chrome.i18n.getMessage('sort_filesize'),
-            today: chrome.i18n.getMessage('time_today'),
-            week: chrome.i18n.getMessage('time_week'),
-            month: chrome.i18n.getMessage('time_month'),
-            quarter: chrome.i18n.getMessage('time_quarter'),
-            year: chrome.i18n.getMessage('time_year'),
             type_label: chrome.i18n.getMessage('type_label'),
             type_static: chrome.i18n.getMessage('type_static'),
             type_animated: chrome.i18n.getMessage('type_animated'),
@@ -609,17 +679,12 @@
             score_placeholder: chrome.i18n.getMessage('score_placeholder'),
             fav_label: chrome.i18n.getMessage('fav_label'),
             fav_placeholder: chrome.i18n.getMessage('fav_placeholder'),
-            search_btn: chrome.i18n.getMessage('search_btn'),
             limit_label: chrome.i18n.getMessage('limit_label'),
             image_label: chrome.i18n.getMessage('image_label'),
             img_landscape: chrome.i18n.getMessage('img_landscape'),
             img_portrait: chrome.i18n.getMessage('img_portrait'),
             img_hd: chrome.i18n.getMessage('img_hd'),
             time_placeholder: chrome.i18n.getMessage('time_placeholder'),
-            unit_d: chrome.i18n.getMessage('unit_day'),
-            unit_w: chrome.i18n.getMessage('unit_week'),
-            unit_mo: chrome.i18n.getMessage('unit_month'),
-            unit_y: chrome.i18n.getMessage('unit_year'),
             dedup: chrome.i18n.getMessage('dedup_btn'),
             filter: chrome.i18n.getMessage('filter_label'),
             advanced: chrome.i18n.getMessage('advanced_settings'),
@@ -668,12 +733,12 @@
                     <div class="qf-range-item">
                         <span class="qf-range-label">${i18n.score_label}</span>
                         <input type="text" class="quick-filter-input" id="qf-score-input"
-                               placeholder="${i18n.score_placeholder}" value="${state.score || ''}" />
+                               placeholder="${i18n.score_placeholder}" />
                     </div>
                     <div class="qf-range-item">
                         <span class="qf-range-label">${i18n.fav_label}</span>
                         <input type="text" class="quick-filter-input" id="qf-fav-input"
-                               placeholder="${i18n.fav_placeholder}" value="${state.favcount || ''}" />
+                               placeholder="${i18n.fav_placeholder}" />
                     </div>
                     <div class="qf-range-item qf-range-item-wide">
                         <span class="qf-range-label">${i18n.time}</span>
@@ -739,7 +804,7 @@
                         <div class="qf-range-item qf-range-item-wide">
                             <span class="qf-range-label">${i18n.limit_label}</span>
                             <input type="text" class="quick-filter-input" id="qf-limit-input"
-                                   placeholder="max 200" value="${state.limit || '20'}" />
+                                   placeholder="max 200" />
                         </div>
                     </div>
                 </div>
@@ -755,6 +820,7 @@
 
         // 插入到侧边栏顶部
         sidebar.prepend(container);
+        updateButtonStates();
 
         // 将原生搜索框移入面板，并注入自定义搜索按钮
         const searchBox = document.querySelector(CONFIG.selectors.searchBox);
@@ -772,22 +838,9 @@
             }
         }
 
-        // 从搜索框初始化面板状态（会清理搜索框中的 metatag）
-        // 先从 URL 搜索框解析，再合并持久化存储中的状态
-        initFilterState();
+        // 先加载存储作为默认值，再用当前 URL / 搜索框状态覆盖，避免旧状态污染当前搜索。
         loadFilterState(() => {
-            // URL 中的 metatag 优先级高于存储的状态
-            // initFilterState 已经解析了 URL，这里用 URL 的值覆盖存储值
-            const input = document.querySelector(CONFIG.selectors.tagInput);
-            if (input) {
-                const urlState = getActiveState(location.search || '');
-                // 如果 URL 中有某个 metatag，则以 URL 为准
-                for (const key in filterState) {
-                    if (urlState[key]) {
-                        filterState[key] = urlState[key];
-                    }
-                }
-            }
+            initFilterState(hasUrlTagsParam());
             updateButtonStates();
         });
 
@@ -903,19 +956,7 @@
             filterState.limit = val.toString();
         }
         
-        if (ageInput && ageUnit) {
-            let val = ageInput.value.trim();
-            if (val) {
-                const rangeMatch = val.match(/^(\d+)\.\.(\d+)$/);
-                if (rangeMatch) {
-                    val = `${rangeMatch[1]}${ageUnit.value}..${rangeMatch[2]}${ageUnit.value}`;
-                } else {
-                    if (val.match(/^\d+$/)) val = '<' + val;
-                    if (!val.match(/(d|w|mo|y)$/i)) val += ageUnit.value;
-                }
-            }
-            filterState.age = val || null;
-        }
+        if (ageInput && ageUnit) filterState.age = normalizeAgeFilter(ageInput.value, ageUnit.value);
     }
 
     // 初始化
@@ -932,10 +973,7 @@
         observerTimer = setTimeout(() => {
             if (!document.querySelector('#quick-filter-container')) injectUI();
             if (masonryEnabled) {
-                const container = document.querySelector(CONFIG.selectors.postsContainer);
-                if (container && !container.classList.contains('masonry-container')) {
-                    applyMasonryLayout();
-                }
+                refreshMasonryLayout();
             }
         }, 200);
     });
