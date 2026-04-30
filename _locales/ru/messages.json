@@ -205,5 +205,7 @@
   "site_ui_gallery": { "message": "Галерея" },
   "site_ui_rss": { "message": "RSS" },
   "toggle_btn": { "message": "Перекл." },
+  "masonry_columns_label": { "message": "Колонки" },
+  "masonry_columns_placeholder": { "message": "авто" },
   "translate_btn": { "message": "Перевод" }
 }

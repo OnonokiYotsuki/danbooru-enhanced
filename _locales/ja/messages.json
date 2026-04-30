@@ -205,5 +205,7 @@
   "site_ui_gallery": { "message": "ギャラリー" },
   "site_ui_rss": { "message": "RSS" },
   "toggle_btn": { "message": "切替" },
+  "masonry_columns_label": { "message": "列数" },
+  "masonry_columns_placeholder": { "message": "自動" },
   "translate_btn": { "message": "翻訳" }
 }

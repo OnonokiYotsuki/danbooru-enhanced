@@ -19,6 +19,10 @@
         },
         masonry: {
             storageKey: 'danbooru-qf-masonry-enabled',
+            columnsKey: 'danbooru-qf-masonry-columns',
+            defaultColumns: 0,
+            minColumns: 3,
+            maxColumns: 12,
             columnWidth: 200,  // 每列宽度 (px)
             gap: 6             // 列间距 (px)
         },
@@ -274,6 +278,7 @@
     // ========== 瀑布流布局 (Masonry Layout) ==========
 
     let masonryEnabled = localStorage.getItem(CONFIG.masonry.storageKey) === 'true';
+    let masonryColumns = getStoredMasonryColumns();
     let masonryResizeTimer = null;
     let masonryLayoutTimer = null;
     let masonryLayoutRafId = null;
@@ -298,6 +303,45 @@
         _masonryItems = null;
     }
 
+    function normalizeMasonryColumns(value) {
+        const parsed = parseInt(value, 10);
+        if (!Number.isFinite(parsed) || parsed <= 0) return CONFIG.masonry.defaultColumns;
+        return Math.min(CONFIG.masonry.maxColumns, Math.max(CONFIG.masonry.minColumns, parsed));
+    }
+
+    function getStoredMasonryColumns() {
+        return normalizeMasonryColumns(localStorage.getItem(CONFIG.masonry.columnsKey));
+    }
+
+    function setMasonryColumns(value) {
+        masonryColumns = normalizeMasonryColumns(value);
+        if (masonryColumns > 0) {
+            localStorage.setItem(CONFIG.masonry.columnsKey, String(masonryColumns));
+        } else {
+            localStorage.removeItem(CONFIG.masonry.columnsKey);
+        }
+        updateMasonryColumnsInput();
+        if (masonryEnabled) {
+            cacheMasonryRefs();
+            scheduleLayout();
+        }
+    }
+
+    function updateMasonryColumnsInput() {
+        const select = document.querySelector('#qf-masonry-columns-select');
+        if (select && document.activeElement !== select) {
+            select.value = masonryColumns > 0 ? String(masonryColumns) : '';
+        }
+    }
+
+    function getMasonryColumnOptions() {
+        const options = [`<option value="">${chrome.i18n.getMessage('masonry_columns_placeholder') || 'auto'}</option>`];
+        for (let i = CONFIG.masonry.minColumns; i <= CONFIG.masonry.maxColumns; i++) {
+            options.push(`<option value="${i}">${i}</option>`);
+        }
+        return options.join('');
+    }
+
     /**
      * 瀑布流布局引擎（性能优化版）：
      * - 使用缓存的 DOM 引用
@@ -315,10 +359,10 @@
         const containerWidth = container.clientWidth;
         if (containerWidth === 0) return;
 
-        const colWidth = CONFIG.masonry.columnWidth;
         const gap = CONFIG.masonry.gap;
 
-        const numCols = Math.max(1, Math.floor((containerWidth + gap) / (colWidth + gap)));
+        const autoCols = Math.max(1, Math.floor((containerWidth + gap) / (CONFIG.masonry.columnWidth + gap)));
+        const numCols = masonryColumns > 0 ? Math.min(masonryColumns, items.length) : autoCols;
         const actualColWidth = (containerWidth - (numCols - 1) * gap) / numCols;
 
         const colHeights = new Array(numCols).fill(0);
@@ -663,6 +707,8 @@
             time: chrome.i18n.getMessage('time_label'),
             reset: chrome.i18n.getMessage('reset_btn'),
             masonry: chrome.i18n.getMessage('masonry_btn'),
+            masonry_columns: chrome.i18n.getMessage('masonry_columns_label') || 'Columns',
+            masonry_columns_placeholder: chrome.i18n.getMessage('masonry_columns_placeholder') || 'auto',
             score: chrome.i18n.getMessage('sort_score'),
             fav: chrome.i18n.getMessage('sort_fav'),
             rank: chrome.i18n.getMessage('sort_rank'),
@@ -793,6 +839,12 @@
                                 <button class="quick-filter-btn btn-layout-masonry ${masonryEnabled ? 'active' : ''}" id="qf-masonry-toggle">${i18n.toggle}</button>
                             </div>
                         </div>
+                        <div class="qf-range-item">
+                            <span class="qf-range-label">${i18n.masonry_columns}</span>
+                            <select class="quick-filter-select qf-masonry-columns-select" id="qf-masonry-columns-select">
+                                ${getMasonryColumnOptions()}
+                            </select>
+                        </div>
                         ${isEnglish ? '' : `
                         <div class="qf-range-item">
                             <span class="qf-range-label">${i18n.site_i18n}</span>
@@ -821,6 +873,7 @@
         // 插入到侧边栏顶部
         sidebar.prepend(container);
         updateButtonStates();
+        updateMasonryColumnsInput();
 
         // 将原生搜索框移入面板，并注入自定义搜索按钮
         const searchBox = document.querySelector(CONFIG.selectors.searchBox);
@@ -931,6 +984,11 @@
         });
 
         container.addEventListener('change', (e) => {
+            if (e.target.id === 'qf-masonry-columns-select') {
+                setMasonryColumns(e.target.value);
+                return;
+            }
+
             if (e.target.id === 'qf-age-unit') {
                 filterUpdateFromInputs();
                 saveFilterState();

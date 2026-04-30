@@ -126,5 +126,7 @@
   "filter_label": { "message": "🧹 Filter" },
   "advanced_settings": { "message": "⚙️ Advanced Options" },
   "toggle_btn": { "message": "Toggle" },
+  "masonry_columns_label": { "message": "Columns" },
+  "masonry_columns_placeholder": { "message": "auto" },
   "translate_btn": { "message": "Translate" }
 }
